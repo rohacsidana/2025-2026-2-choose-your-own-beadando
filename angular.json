@@ -40,7 +40,6 @@
               "src/styles.less"
             ],
             "scripts": [
-              "node_modules/marked/marked.min.js"
             ],
             "webWorkerTsConfig": "tsconfig.worker.json",
             "browser": "src/main.ts"
