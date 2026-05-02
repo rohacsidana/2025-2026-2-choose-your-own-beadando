@@ -18,250 +18,316 @@ export const tasks: {
 }[] = [
   {
     A: {
-      imageUrl: 'assets/images/tasks/1/A/rally.png',
-      story: 'Készíts egy egyszerű, felülnézetes (top-down nézetű) autóversenyzős játékot.',
+      imageUrl: 'assets/images/tasks/1/A/fallout.jpg',
+      story: `Ebben a feladatban egy küldetésvezérlő rendszert kell készítened.
+Az alkalmazásban küldetéseket és személyzetet lehet létrehozni, a kettőt összerendelni, valamint a küldetések állapotát kezelni.`,
       subTasks: [
         {
-          text: `Készíts egy egyszerű **grafikus objektumot**, amely felülnézetből ábrázol egy autót.
-          Legegyszerűbb esetben állhat egy téglalapból és négy ellipszisből (az autó teste és négy kereke),
-          de készíthetsz ennél bonyolultabb és szebb megjelenést is.`,
+          text: `Hozz létre **TypeScript interfészek**et a küldetésekhez és a személyzet tagjaihoz.
+
+A személyzet adatai:
+- azonosító
+- név
+- kép (string típus, base64 formátumban kerül majd letárolásra)
+
+Egy küldetés a következő adatokat tartalmazza:
+- azonosító
+- név
+- leírás
+- nehézség (könnyű, normál, nehéz)
+- státusz (nyitott, folyamatban, befejezett, sikertelen)
+- szükséges létszám
+- hozzárendelt személyzet`,
           xp: 2
         },
         {
-          text: `Készíts egy függvényt, amely **véletlenszerűen generál autókat** az alábbi tulajdonságokkal:
-- Háttérszín (fix értékkészletből vagy akár rangom HEX/RGB színkód)
-- Test életereje (szám, például 2 és 10 között)
-- Kerekek életereje (szám, például 1 és 4 között)
-- Gyorsulás (szám, például pixel/másodperc^2-ben)
-- Maximális sebesség (szám, például pixel/másodpercben)`,
-          xp: 1
-        },
-        {
-          text: `**Generálj 6 darab véletlenszerű autót** (a korábban létrehozott függvény segítségével),
-          majd rajzold ki őket egymás mellett a vászonra (Canvas).
+          text: `A felületet bontsd két, egymás melletti panelre. A bal oldali panelben lehessen **választani a feladat fő funkciói közül**:
+- Személyzetkezelő
+- Küldetés létrehozása
+- Küldetések kiosztása
+- Küldetésvezérlő
 
-Ügyelj arra, hogy az autók ne fedjék egymást, és jól elkülöníthetően jelenjenek meg.`,
-          xp: 1
-        },
-        {
-          text: `Egy **autó adatai jelenjenek meg** a felületen, amikor a felhasználó autó felé mozgatja a kurzort.
-          Ezt az információt megjelenítheted Canvas technológiával, Canvas felett megjelenített tooltippel vagy
-          popoverrel, de az is megfelelő ha egyszerűen csak a Canvason kívül megjelenik egy dobozban.
+A választás módjának megoldása tetszőleges (pl.: gombok, egy szelektor, stb.).
 
-A lényeg, hogy a tartalma automatikusan frissüljön, ha pedig az egér nem egy autó felett van akkor ne jelezzünk semmit.`,
+A fő funkciókat külön komponensekben implementáld.
+Maga a funkció majd a jobb oldali panelben jelenjen meg.
+          
+A felület felszabdalásához használd az _ng-zorro_ splitter komponensét: https://ng.ant.design/components/splitter/en`,
           xp: 2
         },
         {
-          text: `A játék indítása előtt az **autók legyenek kattinthatók**.
-          A játékos így választhatja ki, melyik autóval szeretne játszani.
-          A kiválasztott autó vizuálisan is legyen megkülönböztetve (pl. border használatával).
+          text: `Először implementáld a **Személyzetkezelő** funkciót.
+          
+Egy űrlap segítségével legyen lehetőség felvenni új személyeket.
+Az űrlap két mezőből álljon:
+- Név (string típus)
+Kapcsolódó validációk: Kötelező, minimum 5, maximum 16 karakter, a név 2 és 4 közötti szóból álljon.
+- Kép (string típus - base64)
+Képfeltöltéshez használd az _ngx-image-cropper_ (https://www.npmjs.com/package/ngx-image-cropper) csomagot.
+A kép feltöltése opcionális, viszont ha meg van adva, akkor a kép felbontása legalább 32x32 pixel, legfeljebb 1024x1024 pixel legyen.
 
-A kiválasztással kapcsolatban az alábbi feltételeknek kell teljesülniük:
-- Csak egy autó lehet kiválasztva egyszerre.
-- Egy autóra történő második kattintás vonja vissza a kiválasztást.
-- A kiválasztás kizárólag a játék indítása előtt legyen lehetséges.`,
+Mentéskor a személyzet adatait localStorage-ben tárold, beleértve a feltöltött képeket is.
+Mivel localStorage-ben domainenként csak 5MB tárolható a legtöbb browser esetében, érdemes kisebb képekkel tesztelni.`,
+          xp: 6
+        },
+        {
+          text: `Az űrlap felett egy listában (https://ng.ant.design/components/list/en) jelenjenek meg a **személyzet eddig felvett tagjai**.
+A listában a személyhez tartozó kép is jelenjen meg.
+Amennyiben nem lett kép megadva a személyhez, egy tetszőleges placeholder képet jeleníts meg.`,
+          xp: 3
+        },
+        {
+          text: `Listaelemenként jelenjen meg két ikon vagy gomb, amellyel a **személyzet tagjai módosíthatóak valamint törölhetőek**.`,
           xp: 2
         },
         {
-          text: `Helyezz el a felületet egy gombot a játék indításához. A **játék indítása** csak akkor legyen lehetséges,
-          ha a játékos már választott autót.
+          text: `Következzen a **Küldetés létrehozása** funkció implementálása.
+Először készíts űrlapot reactive form használatával.
 
-Ha a játékos megpróbálja elindítani a játékot autóválasztás nélkül, jelenjen meg egy hibajelzés
-(pl. figyelmeztető szöveg a Canvas felett vagy felugró üzenet).`,
-          xp: 1
+Az űrlap tartalmazza a következő mezőket:
+- név (string)
+- leírás (string)
+- nehézség (enum, értékkészlete: "könnyű", "normál", "nehéz". Használj tetszőleges választót, mint select vagy radiobutton.)
+- szükséges létszám (szám, használd az InputNumber komponenst: https://ng.ant.design/components/input-number/en)
+
+Létrehozáskor a küldetések "Nyitott" státuszban jöjjenek létre.
+
+Az űrlap a következő validációkat alkalmazza:
+- A leírást leszámítva minden mező megadása kötelező.
+- A létszám értéke minimum 1, maximum 3.
+- Ha a nehézség "nehéz", akkor a szükséges létszám értéke minimum 2 legyen, egyéb esetben 1 ember elegendő.
+
+Mentéskor a küldetéseket cookie-ban tárold.
+Használható például az _ngx-cookie-service_ (https://www.npmjs.com/package/ngx-cookie-service) csomag.`,
+          xp: 5
         },
         {
-          text: `A játék indítása után a játékos tudja **irányítani a kiválasztott autót** a WASD vagy a kurzorbillentyűkkel.
+          text: `A **Küldetések kiosztása** funkció alatt a felvett küldetések egy fában (https://ng.ant.design/components/tree/en) jelenjenek meg.
 
-A mozgatás során vedd figyelembe a korábban generált autóparamétereket:
-- Gyorsulás: az autó sebessége fokozatosan növekedjen a megadott érték alapján.
-- Maximális sebesség: az autó sebessége ne léphesse túl a maximumot.
-- Fékezés: ha a játékos az aktuális iránnyal ellentétes gombot nyom meg, az autó lassuljon.
-- Lassulás input nélkül: ha nem érkezik új irányítóbemenet, az autó lassuljon automatikusan (fokozatosan csökkenő sebességgel).
+A fa legmagasabb szintű csomópontjai a státuszok legyenek:
+- Nyitott
+- Folyamatban
+- Befejezett
+- Sikertelen
 
-Az autó ne csak 4 fix irányba tudjon mozogni, hanem fokozatosan forduljon (rotate) amikor ilyen irányú inputot kap.
+Ezek alatt jelenjenek meg a küldetések nevei, mint a fa levelei.
 
-Törekedj arra, hogy az irányítás minél inkább használható (és ezáltal a játék játszható) legyen, de ha az irányítás a
-szabályoknak megfelelően működik (lehet gyorsulni, lassulni, megállni, fordulni), viszont nem teljesen kényelmes, azért pontlevonás nem fog járni.`,
+A küldetések státusz szerinti szűrését Angular Pipa-pal (https://angular.dev/api/core/Pipe) implementáld.
+Az elsődleges bemeneti paramétere legyen a küldetéslista, a második paraméter pedig egy státusz értéke (Nyitott, Folyamatban, Befejezett, Sikertelen).
+A pipe eredménye legyen a státusz szerint leszűrt küldetéslista.`,
           xp: 4
         },
         {
-          text: `Autók ne tudjanak egymásba csúszni, **ütközés** esetén keletkezzen egyértelmű reakció.
-
-Fizikai reakció:
-- Az ütköző autók visszapattannak vagy irányt váltanak az ütközés tengelye mentén (pl. x vagy y irány).
-- Alternatív megoldás lehet az autók sebességének csökkentése vagy helyzetük korrekciója, hogy ne fedjék egymást.
-
-Sérülésmodellezés:
-- Ütközés esetén mindkét autónak csökkenjen vagy a test vagy pedig az ütköző kerék életereje, attól függően, hogy az
-üközésben mely rész volt érintett.`,
-          xp: 2
-        },
-        {
-          text: `Ha egy autó bármely részének **életereje nullára csökken** (akár a testé, akár bármelyik keréké),
-          akkor az autó kerüljön ki a versenyből és tűnjön el a Canvas-ről is.
-
-Ha a játékos által irányított autó kerül ki a játékból, a játék azonnal érjen véget, és jeleníts meg egy üzenetet
-a játékos számára (pl. "A jármű megsemmisült, vesztettél!").`,
-          xp: 2
-        },
-        {
-          text: `Helyezz el a pályán (Canvas-en) egy **startvonalat** és egy **célt**.
-Az autók a startvonalról induljanak.
-
-A pályán legyenek akadályok is, amelyekkel ütközve hasonló logikának kell lefutni, mint amikor az autó egymással ütköznek.
-A pályának nem szükséges véletlenszerűnek lennie, be is égetheted az objektumot pozícióját.`,
-          xp: 2
-        },
-        {
-          text: `Amikor egy autó eléri a célt, a **játék érjen véget**. Ebben az állapotban:
-- Minden autó álljon meg, ne mozogjanak tovább sem AI vezérléssel, sem felhasználói irányítással.
-- A játékos se tudja többé irányítani a saját autóját,
-- A Canvas-on jelenjen meg egy üzenet a nyertes autóról (pl. "Nyertes: Autó #3"). Ehhez érdemes egy nevet is rendelni az autókhoz.`,
+          text: `A fa valamely levelére (egy küldetésre) kattintva jelenjenek meg a **küldetés adatai egy felugró modális ablakban** (https://ng.ant.design/components/modal/en).`,
           xp: 1
         },
         {
-          text: `Bónusz feladat: A játékos által nem irányított autók is **próbáljanak eljutni a célba önállóan**.
-          Célszerű olyan algoritmust készíteni ami próbálja kerülni az ütközéseket, de közelebb viszi a célhoz az autót.
+          text: `A modalban lehessen **személyzetet rendelni az adott küldetéshez**.
+Pontosan annyi személy hozzárendelését engedje a felület, ami a küldetés létszámának meg lett adva.
+Egy személy tartozhat egyszerre több küldetéshez is, ezzel nem szükséges külön foglalkozni.`,
+          xp: 2
+        },
+        {
+          text: `A **Küldetésvezérlő** menü alatti felületen lehessen változtatni a küldetések státuszát.
+          
+Ez egy drag&drop-os felületen keresztül történjen.
+Használható például a CDK ide kapcsolódó funkciója: https://angular.dev/guide/drag-drop.
 
-A gép viselkedése szimulálható például úgy, hogy folyamatosan generál inputparancsokat
-(pl. "előre", "jobbra-előre", "fékezés"), ugyanúgy, mintha felhasználói billentyűlenyomások történnének.
-
-Itt sem szükséges a tökéletesre törekedni, de az autók mozogjanak önállóan és lehetőleg jussanak el a célba ha nem
-akadályozza őket semmi.`,
+Státuszonként jelenjenek meg itt is a küldetések.
+Ha a felhasználó egy küldetést másik státuszba mozgat, a változás azonnal frissüljön a cookie-ban is.`,
           xp: 3
         },
+        {
+          text: `A **státuszváltásra a következő szabályok vonatkoznak**:
+- Azok a küldetések, amelyeknél nincs meg a megfelelő létszám egyáltalán nem mozgathatóak.
+- A státuszok között csak előre lehessen haladni, visszafelé nem (tehát egy elkezdett küldetés nem mozgatható vissza "Nyitott" státuszba).
+- Egyszerre csak egy lépést haladhassunk előre, tehát "Nyitott"-ból átmozgatható "Folyamatban"-ra, de "Befejezett"-be vagy "Sikertelen"-be nem.
+- "Folyamatban" levő küldetés mozgatható "Befejezett"-be és "Sikertelen"-be is.
+
+Tiltott művelet esetén egy ng-zorro message (https://ng.ant.design/components/message/en)
+vagy notification (https://ng.ant.design/components/notification/en) jelenjen meg, ami a probléma okát jelzi a felhasználónak.`,
+          xp: 4
+        },
+        {
+          text: `Külön bejelentkezési felületet nem szükséges fejleszteni, helyette a bal oldali panelben a funkcióválasztó
+felett legyen lehetőség kiválasztani, hogy **kinek a szemszögéből nézzük éppen a felületet**.
+
+Két szerepkört kezeljen a program:
+- Admin
+- Személyzet
+
+A két szerepkör között két tetszőleges ikonnal ellátott avatar (https://ng.ant.design/components/avatar/en) segítségével lehessen választani.
+Vizuálisan látsszon, hogy a kettőből melyik van éppen kiválasztva.
+
+A "Személyzet" opció választása esetén kelljen választani egyet az előző lépésben felvett személyzetből.
+Kiválasztás után az adott személy szemszögéből jelenjen meg a felület.
+Az admin szerepkör esetén felhasználószintű megkülönböztetésre nincs szükség, mivel ezek nem is léteznek.`,
+          xp: 2
+        },
+        {
+          text: `Készíts **Angular direktívá**t (https://angular.dev/api/core/Directive), amely a felhasználó jogosultsági szintje (Admin vagy Személyzet) alapján elrejthet funkciókat.
+
+A működése valahogy így nézne ki például:
+
+\`\`\`html
+<button *appHasRole="'Admin'">Küldetés létrehozása</button>
+\`\`\`
+
+Ha Admin szerepkörrel használjuk a felületet, akkor a fenti gomb jelenjen meg, egyébként ne.
+
+Adminisztrátorok minden funkciót láthatnak.
+A személyzet számára ne jelenjenek meg a következő funkciók:
+- Személyzetkezelő
+- Küldetés létrehozása
+- Küldetések kiosztása`,
+          xp: 2
+        },
+        {
+          text: `A **Küldetésvezérlő személyzeti szerepkörben** csökkentett funkcionalitással jelenjen meg.
+- Az ő szerepkörük esetén ne legyen lehetőség státuszváltásra (legyen kikapcsolva a drag&drop).
+- Ezen felül ne jelenjen meg számukra minden küldetés, csak amihez hozzá vannak rendelve.`,
+          xp: 2
+        }
       ],
-      title: `Race`
+      title: `Quest Log`
     },
     B: {
-      imageUrl: 'assets/images/tasks/1/B/lego.webp',
-      story: '',
+      imageUrl: 'assets/images/tasks/1/B/resident_eeeevil.png',
+      story: 'Készítsd el a Resident Evil játékokból ismert inventory (eszköztár) rendszer egyszerűsített változatát Konvával és Angularban.',
       subTasks: [
         {
-          text: `A felületen egy eszköztár (toolbar) található, amely öt gombot tartalmaz:
-- **Kijelölő mód** - az első gomb bekapcsolásával a felhasználó kiválasztó módban dolgozhat, azaz meglévő elemeket jelölhet ki és módosíthat.
-- **Rajzeszközök** - a többi gombbal a felhasználó az alábbi alakzatokat helyezheti el a vásznon:
-  - kör
-  - ellipszis
-  - háromszög
-  - téglalap
+          text: `A felület bal oldalán jelenjen meg egy 4x2-as rács, ami a játékos inventoryját fogja reprezentálni.
+A rácsot Konva felületen rajzold ki.
 
-A téglalap esetében egy előkészített megoldáskezdeményt találsz segítségként.
-A többi alakzat elhelyezését hasonló logikával, önállóan kell implementálnod.`,
+![Inventory](/assets/images/tasks/1/B/inventory_small.png)`,
           xp: 2
         },
         {
-          text: `Legyen lehetőség a lehelyezett objektumok animálására.
-
-Ha a felhasználó jobb gombbal kattint egy elemre, jelenjen meg egy **felugró menü** (context menu) a kurzor pozíciójában.
-A menü a következő opciókat tartalmazza:
-- Forgatás jobbra
-- Forgatás balra
-- Ugráltatás (fel-le mozgás)
-
-A forgatás animációk kör esetén ne legyenek elérhetőek.
-`,
+          text: `Szintén a Konva felületen, jelenjen meg egy elem, ami a **pénzkészletet** jelöli. 
+A kezdeti értéke legyen 1000.`,
           xp: 1
         },
         {
-          text: `Valósítsd meg az előző feladatban definiált **animációkat**.
-
-Az animációk legyenek folyamatosak (végtelen ciklus), azaz addig működjenek, amíg le nem állítják őket külön parancsra
-(ld.: következő feladat).
-Minden egyes elem saját animációval rendelkezzen, amely nem befolyásolja a többit.
-
-Az animációs típusok működjenek az alábbi módon:
-- Forgatás jobbra: az objektum az óramutató járásával megegyező irányban forog.
-- Forgatás balra: az objektum az óramutató járásával ellentétes irányban forog.
-- Ugráltatás: az objektum folyamatosan mozogjon fel-le.`,
-          xp: 3
-        },
-        {
-          text: `Legyen lehetőség **animáció megállítására**.
-Ha egy objektumon jelenleg fut animáció, akkor jobbklikk esetén ne az animációválasztó menü jelenjen meg,
-hanem kizárólag egyetlen lehetőség: "Animáció megállítás".
-
-Az animáció leállításakor az objektum abban a pozícióban és állapotban (forgatás) maradjon amelyben éppen tartott az animáció szerint.
-Ezután az objektumra ismét jobbklikket alkalmazva újra elérhetők legyenek az animációs opciók.`,
-          xp: 1
-        },
-
-        {
-          text: `Készíts egy **újabb felhelyezhető alakzatot**: egy tetszőlegesen kiválasztott South Park karaktert.
-
-A karakteren nyugodtan egyszerűsíts, nem muszáj ívelt vonalakat használni, csak egyenes vonalakból, körökből és téglalapokból
-álló megvalósítás is elfogadható, a lényeg, hogy az alakzat és a színezés alapján azért megismerhető legyen a karakter.
-
-Egészítsd ki az eszköztárt is, hogy legyen lehetőség az új, komplex objektum lehelyezésére.
-
-![Cartman](/assets/images/tasks/1/B/cartman.png)
-
-Segítség: https://www.southparkstudios.com/w/index.php?title=List_of_Characters&oldid=14766#Featured_4th_Graders`,
-          xp: 3
-        },
-        {
-          text: `Hozz létre egy oldalsó listanézetet a Konva canvas bal oldalán, amely a **jelenleg futó animációkat
-          jeleníti meg valós időben**.
-
-Minden listaelem tartalmazza a következő információkat:
-- Az objektum típusa (pl. "Háromszög", "Kenny", stb.).
-- Az aktuálisan futó animáció típusa (pl. "Forgás jobbra", "Ugráltatás").
-- Hány másodperce fut az animáció (folyamatosan frissülő kijelzés).
-
-Minden listaelem tartalmazzon egy interakciós lehetőséget is:
-- Animáció megállítása. Ezzel az elem ki is kerül a listából.
-
-Az listaelemek sorrendjével nem szükséges külön foglalkozni, lehet felhelyezési sorrendben.
-Animáció indítása esetén természetesen azonnal jelenjen is meg az objektum a listában.
-
-Segítség: https://ng.ant.design/components/list/en`,
+          text: `A pénzkészlet mellett, továbbra is a Konva felületen, jelenjen meg egy gombszerű elem.
+Erre kattintva a **pénzkészlet kattintásonként 100-zal növekedjen**.`,
           xp: 2
         },
         {
-          text: `Egészítsd ki a bal oldali animációs listát egy új funkcióval:
-minden listaelem tartalmazzon egy szám beviteli mezőt (number input), amellyel az **adott objektum animációjának sebessége állítható**.
+          text: `A Konva Canvas alatt vagy mellett jelenjen meg a **bolt**.
+Ezt Angularban implementáld, DOM-ban, tehát ne a Canvas része legyen!
 
-Az input egy sebességszorzót jelöljön (pl. 1.0 az alapértelmezett érték, 0.5 lassítás, 2.0 gyorsítás).
-Amint a felhasználó módosítja az értéket, a hozzá tartozó animáció azonnal alkalmazza az új sebességet
-(tehát nincs szükség külön mentésre vagy megerősítésre).`,
-          xp: 3
-        },
-        {
-          text: `Egészítsd ki az animációs listát egy "szem" ikon (ng-zorro "eye" és "eye-invisible" ikonok) gombbal
-          minden alakzat mellett.
-          A gombbal a felhasználó **be- és kikapcsolhatja az alakzat láthatóságát** a Konva stage-en, tehát így ideiglenesen
-          elrejthetővé válnak az animálódó objektumok.
-
-Gombnyomásra az objektum azonnal tűjön el a vászonról, azonban a listában maradjon továbbra is látható.
-Ilyenkor a gomb ikonja is frissüljön az aktuális állapot szerint és legyen lehetőség az objektum újbóli megjelenítésére.`,
+Először helyezz el egy három fület tartalmazó fülsort az _ng-zorro_ Tabs (https://ng.ant.design/components/tabs) komponensével.
+A három tab neve legyen:
+- Fegyverek
+- Töltény
+- Fejlesztések`,
           xp: 1
         },
         {
-          text: `Lehessen **elnevezni a felhelyezett grafikus elemeket**.
+          text: `A fegyverek alatt legyen legalább három **termék**.
+Nyugodtan választhatsz gyerekbarát eszközöket ha az szimpatikusabb (pl.: csúzli, vízipisztoly, ...).
+A lehetőségek rád vannak bízva, de minden lehetőség kapjon egy nevet, egy méretet és egy árat.
+A méret fogja meghatározni, hogy az adott fegyver mekkora helyet foglal az inventoryban.
+Olyan méretet válassz, ami tényleg el is fog férni az inventoryban (pl.: 2x1, 4x1, 2x2).
+Például egy 5x3-as méretű fegyver a korábban meghatározott rácsméretben soha nem férne el.
 
-Ha a felhasználó bal egérgombbal kattint egy grafikus elemre, jelenjen meg egy felugró ablak (modal).
-A modal tartalmazza a következőket:
-- Egy szöveges bevitelő mező (input), ahol a felhasználó meghadhatja az elem nevét.
-- Két gomb: "Mégsem" és "Név mentése".
+A töltények menüpontban lehessen töltényt venni a fegyverekhez (minden fegyvertípushoz egy tölténytípus).
+A név és az ár itt is releváns, viszont a méret legyen fixen 1x1.
 
-Név mentése esetén kerüljön be a név az alakzat adatai közé.
-Ha az adott objektumhoz jelenleg fut animáció, a név azonnal frissüljön a bal oldali animációs listában is, típus
-helyett a nevet jelenítsük meg, amennyiben az objektum rendelkezik névvel.
-
-Segítség: https://ng.ant.design/components/modal/en`,
+A fejlesztések menüpontban első körben egy lehetőség jelenjen meg az inventory bővítésére.
+Az opció jelezze, hogy megvásárlás esetén 2 négyzettel fogja bővíteni az eszköztárat.`,
           xp: 3
         },
         {
-          text: `Egészítsd ki a névadási funkciót a **név módosításának lehetőségével**.
-          Ha felhasználó egy már elnevezett alakzatra kattint, akkor a felugró modalban:
-
-- Az input mező alapértelmezett értékeként jelenjen meg a korábban megadott név.
-- A felhasználó ezt az értéket módosíthassa, majd mentéssel felülírhassa a régi nevet.`,
-          xp: 1
+          text: `Minden boltban található termék esetén legyen lehetőség **megvásárolni** azt egy gomb segítségével.
+A gomb csak akkor legyen aktív ha a játékosnak van elég pénze megvásárolni a terméket,
+egyéb esetben a gomb felé mozgatva az egeret egy tooltip vagy popover jelezze, hogy mennyi pénz hiányzik még a megvételéhez.`,
+          xp: 2
         },
+        {
+          text: `Először a **fegyver megvételé**t implementáld.
+Minden fegyver egészen pontosan egyszer legyen megvásárolható, ha azt a játékos már megvásárolta, akkor az opció már ne jelenjen meg a boltban.
+
+A fegyver megvásárlása esetén a következők történjenek:
+- A fegyver ára kerüljön levonásra a játékos pénzéből.
+- A megvétel lehetősége kerüljön ki a boltból.
+- A fegyver kerüljön be a játékos Konva-ban implementált eszköztárába.
+
+Az utolsó ponthoz szükséges lesz készíteni egy komplex Konva objektumot és azt elhelyezni (célszerű a Konva Group típusát használni).
+Ez történhet hasonlóan, mint, ahogy az órai projektben a "House" és a "Car" objektumokat létrehoztuk.
+Ebben a feladatban még oké ha az eszköztár bal felső sarkába helyeződik fixen, a pozícionálással majd a következő feladat foglalkozik.
+Fontos viszont, hogy a megadott méretben jelenjen meg az objektum, azaz ha például a méret 4x1-es,
+akkor hosszban négy helyet (négyzetet) foglaljon el a rácsban (grid-ben) magasságban pedig 1-et.
+A rajzokat érdemes a kitalált méretnek megfelelően létrehozni, hogy ne torzuljanak.`,
+          xp: 6
+        },
+        {
+          text: `Vásárlás során a megvásárolt fegyver automatikusan olyan pozícióba kerüljön lehelyezésre, ahol valóban **elfér**.
+Ha a korábbi vásárlások miatt már nincsen számára hely, akkor blokkoljuk a megvásárlását és egy
+tooltip vagy popover jelezze ezt a játékos számára.
+
+Fontos, hogy két tárgy soha nem foglalhatja el ugyanazt a négyzetet.`,
+          xp: 4
+        },
+        {
+          text: `Fegyverek mellett legyen lehetőség **töltényeket is vásárolni**.
+A lehelyezési szabály hasonlóan működjön, mint az előző esetben, tehát ha teljesen betelt az eszköztár
+akkor ne legyen lehetőség a megvásárlására
+(ha még az adott töltényből nincs az inventoryban akkor egy szabad rács szükséges).
+
+A töltény annyiban működjön máshogy, mint a fegyver, hogy ebből többet is tud vásárolni a játékos.
+
+Az eszköztárba ezek ne egyesével kerüljenek be, hanem egy kupacba rendeződjenek (stackeljenek).
+Ha az adott tölténytípusból már van legalább egy darab az inventoryban, újabb vásárláskor ne kerüljön be új tárgy, csak a meglévő stack darabszáma növekedjen.
+Ha még nincs ilyen töltény az inventoryban, akkor a vásárláshoz szükséges egy szabad 1x1-es hely.
+
+A tárgy jobb alsó sarkában jelezze egy szám, hogy az adott tölténytípusból mennyi van a játékosnál.`,
+          xp: 4
+        },
+        {
+          text: `A játékos tudja mozgatni az inventoryban szereplő tárgyakat a rácson belül **drag&drop** használatával.
+Fontos, hogy a tárgyak elengedéskor (drop) illeszkedjenek a rácshoz (snap): a tárgy bal felső sarka a legközelebbi rácsmező bal felső sarkához igazodjon.
+ 
+ Ha a játékos olyan helyen engedi el (dropolja) az elemet ahol a tárgy nem férne el, akkor a tárgy térjen vissza az eredeti
+ pozíciójába és jelenjen meg egy üzenet ami a hibajelenséget jelzi.
+ Erre használható például a _ng-zorro_ message komponense: https://ng.ant.design/components/message/en`,
+          xp: 4
+        },
+        {
+          text: `Kattintásra tárgyak legyenek **kiválasztható**ak. Ilyenkor a tárgy kapjon egy keretet.
+Újbóli kattintásra távolítsuk el a kiválasztást.
+Egyszerre csak egy tárgy lehet kiválasztva, tehát ha egy másik tárgyra kattintunk akkor kerüljön át oda a kiválasztás.`,
+          xp: 2
+        },
+        {
+          text: `Amikor van kiválasztva tárgy, akkor a felületen valahol jelenjen meg egy gomb ami a **tárgy eldobásá**ra szolgál.
+Ezt a gombot használva törlődjön a tárgy az eszköztárból.
+Fegyverek esetén ilyenkor váljon újra megvásárolhatóvá a tárgy.`,
+          xp: 2
+        },
+        {
+          text: `A kiválasztott tárgyak legyenek **mozgathatóak a billentyűzet kurzorgombjaival** is.
+A mozgás csak akkor érvényesüljön ha a gombnyomás valid pozícióba mozgatja a tárgyat.
+
+Ha nincs kiválasztva tárgy, akkor a kurzorbillentyűknek nem szükséges funkciót adni.
+
+Például ha van egy 4x1-es tárgyunk a 4x2-es rácsban akkor azt horizontálisan biztosan nem fogjuk tudni mozgatni,
+vertikálisan a föl és le gombokkal viszont elképzelhető, hogy igen, hacsak nem blokkolja ezt más tárgy.`,
+          xp: 3
+        },
+        {
+          text: `A bolt fejlesztések füle alatt egyetlen termék található: az **eszköztár bővítése**.
+          
+Ez legyen négy alkalommal bővíthető.
+Minden vásárlás 2 új négyzettel bővítse az eszköztárt, a 4-es szélesség megtartásával
+(az inventory mélységét bővítjük, nem a szélességét).
+
+Tehát ha 4x2-es négyzetrácsból indulunk, akkor az első vásárlás után a harmadik sorban két új mező jelenik meg.
+A második vásárlás után három darab 4 elemes sorunk lesz már.`,
+          xp: 4
+        }
       ],
-      title: `Animation`
+      title: `Inventory management`
     },
     preview: undefined
   },
@@ -289,7 +355,7 @@ A lehetséges opciókat érdemes TypeScript enum típusokkal reprezentálni.`,
           reprezentációját tartalmazza.
 
 A **portrékat** a karakterhez rendelt adatok alapján **rajzold ki**.
-Jelenjenek meg a Konva Canvas-on, több sorba rendezve (pl. 5 oszlop x 4 sor).
+Jelenjenek meg a Konva felületen, több sorba rendezve (pl. 5 oszlop x 4 sor).
 
 A kirajzolásnál törekedjetek az egyszerűségre, a cél a felismerhetőség, nem a részletesség:
 - Fej alak: kör, ellipszis (esetleg kocka) a head shape-es enum alapján.
@@ -315,7 +381,7 @@ A kiválasztott személy adatait logold ki a console-ra.`,
           xp: 1
         },
         {
-          text: `A Konva Canvas-tól balra jelenjenek meg űrlapelemek, amelyek segítségével a **játékos tippelhet a
+          text: `A Konva felülettől balra jelenjenek meg űrlapelemek, amelyek segítségével a **játékos tippelhet a
           kiválasztott személy tulajdonságaira**.
           A kérdések alapján fogja majd a rendszer "szűrni" a listát (ld.: következő feladat).
 
@@ -343,7 +409,7 @@ Példa: a felhasználó arra kérdez rá, hogy a személy hajstílus-a kopasz-e.
 Ha a kitalálandó személy nem kopasz akkor minden kopasz hajstílusú portré kiesett a játékból.
 Ha a kitalálnadó személy kopasz, akkor viszont csak a kopaszok maradtak játékban.
 
-Az ilyen módon "kieső" portrék legyenek a Canvas-on is megjelölve tetszőlegesen választott, de egyértelműen látható módon.
+Az ilyen módon "kieső" portrék legyenek a Konva felületen is megjelölve tetszőlegesen választott, de egyértelműen látható módon.
 Történhet például elszürkítéssel vagy akár áthúzással is.
 
 Fontos: egyszer kiesett karakter nem kerülhet vissza a játékba később akkor sem, ha egy következő kérdés alapján már nem esne ki.`,
@@ -371,85 +437,70 @@ Mindkét esetben a játék érjen véget, ne tudjon új kérdéseket illetve tip
     },
     B: {
       imageUrl: 'assets/images/tasks/2/B/2B.jpg',
-      story: 'Komplex számítás végzése Web Workeren.',
+      story: 'Naplófájlok elemzése Web Workeren.',
       subTasks: [
         {
-          text: `A projekted "assets/csv" mappájában található egy **2B.csv** nevű **fájl**,
-          amely 10.000 darab számot tartalmaz.
+          text: `A projekt "assets/logs" mappájában található JSON fájlokat olvasd fel a _HttpClient_ segítségével.
+Az összes beolvasott naplóbejegyzést egyetlen közös tömbben tárold. Tehát ne fájlonként legyen egy tömb, az, hogy melyik fájlból lett beolvasva a bejegyzés nem számít.
 
-A komponens inicializációjakor (ngOnInit) olvasd be ezt a fájlt és a benne található 10.000 számot tárold el
-egy tömbben.`,
+A naplóbejegyzések tartalma fájltól függetlenül megegyezik.
+A naplóbejegyzések tartalmaznak időpontot, típust, súlyosságot, felhasználót, valamint üzenetet.
+Hozz létre hozzá TypeScript interfészt.`,
           xp: 1
         },
         {
-          text: `Integráld a projektedbe __workers_ mappában található _konva.worker.ts_ **Web Worker**t az órai példa alapján,
-          és állítsd be a **kommunikáció**t a fő szál (Angular komponens) és a worker között.
+          text: `Jelenítsd meg a naplóbejegyzéseket az _ng-zorro_ _nz-table_ komponensével: https://ng.ant.design/components/table/en.
+          
+Aktiváld a Virtual Scroll funkciót, hogy nagy elemszám esetén se romoljon a megjelenítés teljesítménye.
+A Virtual Scroll használatára találhatsz példát az előbb említett linken.`,
+          xp: 1
+        },
+        {
+          text: `Készíts szűrőfelületet súlyosság, felhasználó és dátumtartomány alapján.`,
+          xp: 1
+        },
+        {
+          text: `A szűrő űrlap tartalmazzon egy extra validátort: a kezdődátum nem lehet későbbi, mint a végdátum.`,
+          xp: 1
+        },
+        {
+          text: `Integráld a projektedbe __workers_ mappában található _log.worker.ts_ **Web Worker**t az órai példa alapján,
+          és valósítsd meg a **kommunikáció**t a fő szál (Angular komponens) és a worker között.
 
 A worker és a fő szál tudjon üzeneteken keresztül kommunikálni, az ehhez szükséges feliratkozásokat készítsd el.`,
           xp: 1
         },
         {
-          text: `A fő szálon korábban betöltött **számokat juttasd el a Web Workerhez**.
+          text: `Küldd át az aktuális szűrésnek megfelelő naplóbejegyzéslistát a Web Workernek.
+A lista változásra reagálva frissüljön, amikor a szűrési feltételek változnak.
 
-A küldési forma tetszőleges:
-- lehet az egész tömb egyszerre, vagy
-- egyesével küldött értékek sorozata
-
-A worker oldalon a fogadott számokat tárold el egy number[] típusú változóban,
-erre a következő részfeladatok során szükséged lesz még.`,
+A worker oldalon a fogadott naplóbejegyzéseket tárold el egy tömbben.`,
           xp: 1
         },
         {
-          text: `A worker szálon végezd el a korábban átküldött számok **statisztikai kiértékelését**,
-          majd küldd vissza az eredményt a fő szálnak.
+          text: `A worker az aktuális szűrőfeltételeknek megfelelően számolja ki a következő statisztikákat:
+- összes bejegyzés
+- hibák száma
+- warningok száma
+- legtöbbször előforduló felhasználó
+- naponkénti eloszlás
 
-A következő értékeket számold ki:
-- Legkisebb szám
-- Legnagyobb szám
-- Átlag
-- Medián
-- Szórás
+A worker minden esetben az aktuális szűrőfeltételeknek megfelelő naplóbejegyzéseken végezze a számításokat.
 
 Az eredményeket elkészültük után juttasd vissza a fő szálra.
-A fő szál ezt az eredményt fogadja is és logolja ki console-ra.`,
-          xp: 3
+A fő szál ezt az eredményt fogadja és kártyák használatával jelenítsd is meg az aktuális statisztikákat: https://ng.ant.design/components/card/en
+
+A statisztikák kiszámítása kizárólag a Web Workerben történjen, a fő szálon nem végezhető ilyen számítás.`,
+          xp: 2
         },
         {
-          text: `A fő szálon Angular komponens segítségével **jelenítsd meg táblázatos formában azokat a statisztikai
-          értékeket**, amelyeket a worker visszaküldött az előző feladatban.
-
-A számítás alapját képező elemszám is jelenjen meg a táblázat sorában: "X darab szám alapján".
-
-A táblázat sorai legyenek az egyes kiértékelések (jelenleg még csak egy sor jelenne meg az első 10.000 adat alapján),
-oszlopai pedig az értékek (minimum, maximum, átlag, medián, szórás).`,
-          xp: 1
-        },
-        {
-          text: `A komponensben legyen egy gomb, amely **generál 1.000 újabb darab lebegőpontos számot**,
-          majd utasítja a worker-t, hogy ezekkel a számokkal együtt számolja újra a statisztikákat.
-
-A workeren az új számokat is tárold abban a tömbben amelybe az eredeti adatokat helyezted. Ezt követően futtasd le
-a korábban implementált számításokat és az eredményeket juttasd vissza a fő szálra.
-
-A fő szál a friss statisztikát új sorban jelenítse meg a korábbiak alatt (nem felülírva).
-A statisztika sorai tehát a számítások történetét mutassák: pl. először 10.000, majd 11.000, stb. adat alapján.`,
-          xp: 1
-        },
-        {
-          text: `A fő szálon valósíts meg egy **töltőállapotot**, amely akkor jelenik meg, amikor a worker statisztikát
-          számol, és eltűnik, miután az eredmény megérkezett.
-
-Amikor a főszál utasítja a workert a statisztikák kiszámítására, de még nem érkezett meg eredményként a válasz,
-a táblázat helyén vagy egy skeleton (https://ng.ant.design/components/skeleton/en) vagy pedig egy
-spinner (https://ng.ant.design/components/spin/en) jelenjen meg, ezzel jelezve a felhasználónak, hogy a
-számítások még folyamatban vannak.
-
-Ha a worker válasza túl gyorsan érkezik, akkor is jeleníts meg legalább 1 másodpercnyi töltést (pl. setTimeout-tal),
-hogy a működés vizuálisan ellenőrizhető legyen fejlesztés közben.`,
+          text: `Konva segítségével készíts egy egyszerű oszlopdiagramot Konvával a naponkénti bejegyzéseloszlásból.
+          
+A diagram automatikusan frissüljön a statisztikák változásának megfelelően.`,
           xp: 2
         },
       ],
-      title: `Worker`
+      title: `Log Analyzer`
     },
     preview: undefined
   },
