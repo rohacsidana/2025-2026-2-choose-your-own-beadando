@@ -1,4 +1,6 @@
-
+<ng-template #contentTemplate>
+  <ng-content></ng-content>
+</ng-template>
 
 <div style="display: inline-flex; width: 100%">
   <div style="width: 50%">
@@ -15,7 +17,7 @@
         (thisWayBraveAdventurer)="taskSelected.emit('A')">
       </app-task>
     } @else {
-      <ng-content></ng-content>
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
     }
   </div>
   <div style="width: 50%">
@@ -32,7 +34,7 @@
         (thisWayBraveAdventurer)="taskSelected.emit('B')">
       </app-task>
     } @else {
-      <ng-content></ng-content>
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
     }
   </div>
 </div>

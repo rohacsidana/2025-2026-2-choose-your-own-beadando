@@ -29,7 +29,7 @@
     @if (threshold) {
       <div style="width: 100px; min-width: 100px">
         @if (threshold < maxPoints) {
-          {{ threshold }} - {{ (threshold + maxPoints * thresholdDifference) - 0.01 }} pont
+          {{ threshold | number }} - {{ ((threshold + maxPoints * thresholdDifference) - 0.01) | number }} pont
         }
         @if (threshold >= maxPoints) {
           {{ maxPoints }}+ pont
@@ -44,7 +44,7 @@
   [nzCover]="summaryCoverTemplate">
   <ng-template #summaryTitleTemplate>
     <div class="display-block">
-      <h1 class="m-b-0">
+      <h1 class="m-b-0" style="font-size: 28px">
         Várható eredmény: <b>{{ expectedResult }}</b> / {{ maxPoints }} pont
       </h1>
       <p class="font-style-italic m-b-0 white-space-break-spaces">

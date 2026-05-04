@@ -26,8 +26,14 @@ export class NavigatorComponent implements OnInit {
         if (params['index']) {
           this.currentIndex = +params['index'];
         }
-        if (params['taks']) {
-          this.selectedTask = params['task'];
+        if (params['task']) {
+          const task = params['task'];
+
+          if (task === 'A' || task === 'B') {
+            this.selectedTask = task;
+          } else {
+            this.selectedTask = undefined;
+          }
         }
       });
     if (this.route.snapshot.params['index']) {
