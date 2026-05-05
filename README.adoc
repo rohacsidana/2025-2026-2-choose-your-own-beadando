@@ -4,12 +4,12 @@
 
 === Task 1
 
-==== A - Race
+==== A - Quest Log
 
-==== B - Animation
+==== B - Inventory management
 
 === Task 2
 
-==== A - Guess Who
+==== A - Log Analyzer
 
-==== B - Worker
+==== B - Text Analyzer

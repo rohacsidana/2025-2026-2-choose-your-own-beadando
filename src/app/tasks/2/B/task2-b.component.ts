@@ -7,7 +7,6 @@ import {AfterViewInit, Component} from '@angular/core';
     standalone: false
 })
 export class Task2BComponent implements AfterViewInit {
-  worker?: Worker;
 
   constructor() { }
 

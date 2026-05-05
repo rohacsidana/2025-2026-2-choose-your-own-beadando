@@ -12,10 +12,10 @@ export class SummaryComponent implements OnInit {
   expectedResult: number = 0;
   images: Map<number, string> = new Map([
     [1, 'you.png'],
-    [2, 'cringe.gif'],
+    [2, 'shame.jpg'],
     [3, 'bad.mp4'],
-    [4, 'okay.gif'],
-    [5, 'good.gif'],
+    [4, 'okay.jpg'],
+    [5, 'malle_pretty_good.webp'],
     [6, 'huha.jpg'],
   ]);
   maxPoints: number = 50;

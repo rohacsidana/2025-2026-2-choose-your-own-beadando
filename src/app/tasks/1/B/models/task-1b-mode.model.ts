@@ -1,7 +1,0 @@
-export enum Task1BKonvaMode {
-  CIRCLE = 'CIRCLE',
-  ELLIPSE = 'ELLIPSE',
-  POLYGON = 'POLYGON',
-  RECTANGLE = 'RECTANGLE',
-  SELECT = 'SELECT',
-}
