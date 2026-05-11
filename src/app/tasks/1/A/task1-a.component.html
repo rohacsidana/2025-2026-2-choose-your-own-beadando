@@ -1,1 +1,41 @@
-<p>task1-a works!</p>
+<div class="main-container">
+  <nz-splitter>
+    <nz-splitter-panel>
+      <div class="button-group">
+        <button nz-button nzBlock (click)="func = Functions.StaffManager">
+          Személyzetkezelő
+        </button>
+        <button nz-button nzBlock (click)="func = Functions.CreateMission">
+          Új küldetés
+        </button>
+        <button nz-button nzBlock (click)="func = Functions.AssignMissions">
+          Küldetések kiosztása
+        </button>
+        <button nz-button nzBlock (click)="func = Functions.MissionManager">
+          Küldetésvezérlő
+        </button>
+      </div>
+    </nz-splitter-panel>
+    <nz-splitter-panel>
+      <div class="content-area">
+        @switch (func) {
+          @case (Functions.StaffManager) {
+            <h2>Személyzetkezelő</h2>
+          }
+          @case (Functions.CreateMission) {
+            <h2>Új küldetés</h2>
+          }
+          @case (Functions.AssignMissions) {
+            <h2>Küldetések kiosztása</h2>
+          }
+          @case (Functions.MissionManager) {
+            <h2>Küldetésvezérlő</h2>
+          }
+          @default {
+            <p>Kérjük, válasszon a bal oldali menüből a kezdéshez!</p>
+          }
+        }
+      </div>
+    </nz-splitter-panel>
+  </nz-splitter>
+</div>

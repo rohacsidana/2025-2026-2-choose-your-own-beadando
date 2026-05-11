@@ -24,6 +24,7 @@ import {NzListModule} from "ng-zorro-antd/list";
 import {NzDividerModule} from "ng-zorro-antd/divider";
 import {NzCardModule} from "ng-zorro-antd/card";
 import {NzModalModule} from "ng-zorro-antd/modal";
+import { NzSplitterModule } from 'ng-zorro-antd/splitter';
 
 
 const zorroModules = [
@@ -34,7 +35,8 @@ const zorroModules = [
   NzLayoutModule,
   NzListModule,
   NzMenuModule,
-  NzModalModule
+  NzModalModule,
+  NzSplitterModule
 ]
 
 @NgModule({
