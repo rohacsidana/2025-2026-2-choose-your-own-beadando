@@ -1,5 +1,23 @@
 <div class="form-container">
   <h2>Új személyzet hozzáadása</h2>
+  <nz-list
+    nzBordered
+    nzHeader="Regisztrált személyzet"
+    style="margin-bottom: 20px"
+  >
+    @for (member of staff; track member.id) {
+      <nz-list-item>
+        <nz-list-item-meta
+          [nzAvatar]="member.pic || placeholderPic"
+          [nzTitle]="member.name"
+          [nzDescription]="'Azonosító: ' + member.id"
+        >
+        </nz-list-item-meta>
+      </nz-list-item>
+    } @empty {
+      <nz-list-empty />
+    }
+  </nz-list>
 
   <form nz-form [formGroup]="staffForm" (ngSubmit)="submitForm()">
     <nz-form-item>

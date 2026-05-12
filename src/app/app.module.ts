@@ -33,12 +33,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSplitterModule } from 'ng-zorro-antd/splitter';
 import { StaffManagerComponent } from './staff-manager/staff-manager.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from 'node_modules/@angular/common/types/_common_module-chunk';
-import {
-  ImageCropperComponent,
-  ImageCroppedEvent,
-  LoadedImage,
-} from 'ngx-image-cropper';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 
 const zorroModules = [
   NzButtonModule,
@@ -57,6 +53,7 @@ const zorroModules = [
   NzInputModule,
   NzButtonModule,
   NzUploadModule,
+  NzAvatarModule,
 ];
 
 @NgModule({

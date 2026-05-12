@@ -15,6 +15,9 @@ export class StaffManagerComponent implements OnInit {
   imageChangedEvent: Event | null = null;
   croppedImage: any = '';
   nameRegex = /^\s*(\S+\s+){1,3}\S+\s*$/;
+  staff: StaffMember[] = [];
+  placeholderPic =
+    'https://avatars.akamai.steamstatic.com/6a991cedbf9caf7e0dfd32c5f17f13820c818bf8_full.jpg';
 
   constructor(
     private fb: FormBuilder,
@@ -22,6 +25,8 @@ export class StaffManagerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadStaff();
+
     this.staffForm = this.fb.group({
       name: [
         null,
@@ -34,6 +39,11 @@ export class StaffManagerComponent implements OnInit {
       ],
       pic: [null],
     });
+  }
+
+  loadStaff() {
+    const stored = localStorage.getItem('staff');
+    this.staff = stored ? JSON.parse(stored) : [];
   }
 
   fileChangeEvent(event: Event): void {
@@ -62,7 +72,6 @@ export class StaffManagerComponent implements OnInit {
   }
 
   submitForm() {
-    console.log('Form értékei:', this.staffForm.value);
     if (this.staffForm.valid) {
       const storedStaff = localStorage.getItem('staff');
       const staffList: StaffMember[] = storedStaff
@@ -79,6 +88,7 @@ export class StaffManagerComponent implements OnInit {
       localStorage.setItem('staff', JSON.stringify(staffList));
       this.msg.success('Személyzet sikeresen hozzáadva!');
       this.resetForm();
+      this.loadStaff();
     }
   }
 
