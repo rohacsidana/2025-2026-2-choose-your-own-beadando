@@ -6,13 +6,51 @@
     style="margin-bottom: 20px"
   >
     @for (member of staff; track member.id) {
-      <nz-list-item>
+      <nz-list-item [nzActions]="[editAction, deleteAction]">
         <nz-list-item-meta
           [nzAvatar]="member.pic || placeholderPic"
           [nzTitle]="member.name"
-          [nzDescription]="'Azonosító: ' + member.id"
-        >
-        </nz-list-item-meta>
+          [nzDescription]="'ID: ' + member.id"
+        ></nz-list-item-meta>
+
+        <ng-template #editAction>
+          <button
+            nz-button
+            nzType="text"
+            (click)="editMember(member)"
+            nz-tooltip
+            nzTooltipTitle="Szerkesztés"
+          >
+            <span
+              nz-icon
+              nzType="edit"
+              nzTheme="outline"
+              style="color: #52a5f2"
+            ></span>
+          </button>
+        </ng-template>
+
+        <ng-template #deleteAction>
+          <button
+            nz-button
+            nzType="text"
+            nz-popconfirm
+            nzPopconfirmTitle="Biztosan törölni szeretnéd ezt a személyt?"
+            (nzOnConfirm)="deleteMember(member.id)"
+            nz-tooltip
+            nzTooltipTitle="Törlés"
+            nzCancelText="Mégsem"
+            nzOkText="Igen"
+            [nzOkType]="'danger'"
+          >
+            <span
+              nz-icon
+              nzType="delete"
+              nzTheme="outline"
+              style="color: #ed6366"
+            ></span>
+          </button>
+        </ng-template>
       </nz-list-item>
     } @empty {
       <nz-list-empty />
@@ -40,8 +78,6 @@
         [output]="'base64'"
         format="png"
         (imageCropped)="imageCropped($event)"
-        (imageLoaded)="imageLoaded($event)"
-        (cropperReady)="cropperReady()"
         (loadImageFailed)="loadImageFailed()"
       ></image-cropper>
       @if (croppedImage) {
@@ -55,7 +91,7 @@
     <nz-form-item>
       <nz-form-control [nzOffset]="6" [nzSpan]="14">
         <button nz-button nzType="primary" [disabled]="!staffForm.valid">
-          Hozzáadás
+          {{ isEditing ? 'Frissítés' : 'Hozzáadás' }}
         </button>
       </nz-form-control>
     </nz-form-item>

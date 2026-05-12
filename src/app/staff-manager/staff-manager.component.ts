@@ -18,6 +18,8 @@ export class StaffManagerComponent implements OnInit {
   staff: StaffMember[] = [];
   placeholderPic =
     'https://avatars.akamai.steamstatic.com/6a991cedbf9caf7e0dfd32c5f17f13820c818bf8_full.jpg';
+  isEditing = false;
+  editingMemberId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -73,22 +75,33 @@ export class StaffManagerComponent implements OnInit {
 
   submitForm() {
     if (this.staffForm.valid) {
-      const storedStaff = localStorage.getItem('staff');
-      const staffList: StaffMember[] = storedStaff
-        ? JSON.parse(storedStaff)
-        : [];
+      const formValues = this.staffForm.value;
 
-      const newMember: StaffMember = {
-        id: Date.now(),
-        name: this.staffForm.value.name,
-        pic: this.staffForm.value.pic,
-      };
+      if (this.isEditing && this.editingMemberId !== null) {
+        const index = this.staff.findIndex(
+          (m) => m.id === this.editingMemberId
+        );
+        if (index !== -1) {
+          this.staff[index] = {
+            id: this.editingMemberId,
+            name: formValues.name,
+            pic: formValues.pic,
+          };
+        }
+      } else {
+        const newMember: StaffMember = {
+          id: Date.now(),
+          name: formValues.name,
+          pic: formValues.pic,
+        };
+        this.staff.push(newMember);
+      }
 
-      staffList.push(newMember);
-      localStorage.setItem('staff', JSON.stringify(staffList));
-      this.msg.success('Személyzet sikeresen hozzáadva!');
+      localStorage.setItem('staff', JSON.stringify(this.staff));
+      this.msg.success(
+        this.isEditing ? 'Sikeres módosítás!' : 'Sikeres hozzáadás!'
+      );
       this.resetForm();
-      this.loadStaff();
     }
   }
 
@@ -96,11 +109,31 @@ export class StaffManagerComponent implements OnInit {
     this.staffForm.reset();
     this.imageChangedEvent = null;
     this.croppedImage = '';
+    this.isEditing = false;
+    this.editingMemberId = null;
   }
 
-  imageLoaded(image: LoadedImage) {}
-  cropperReady() {}
   loadImageFailed() {
     this.msg.error('A kép betöltése sikertelen!');
+  }
+
+  deleteMember(id: number) {
+    this.staff = this.staff.filter((mem) => mem.id !== id);
+    localStorage.setItem('staff', JSON.stringify(this.staff));
+    this.loadStaff();
+    this.msg.success('Személyzet tagja törölve.');
+  }
+
+  editMember(member: StaffMember): void {
+    this.isEditing = true;
+    this.editingMemberId = member.id;
+
+    this.staffForm.patchValue({
+      name: member.name,
+      pic: member.pic,
+    });
+    this.croppedImage = member.pic;
+
+    this.msg.info('Adatok betöltve az űrlapba szerkesztésre.');
   }
 }

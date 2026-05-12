@@ -35,6 +35,7 @@ import { StaffManagerComponent } from './staff-manager/staff-manager.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { ImageCropperComponent } from 'ngx-image-cropper';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 const zorroModules = [
   NzButtonModule,
@@ -54,6 +55,7 @@ const zorroModules = [
   NzButtonModule,
   NzUploadModule,
   NzAvatarModule,
+  NzPopconfirmModule,
 ];
 
 @NgModule({
