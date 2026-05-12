@@ -6,7 +6,7 @@ enum Functions {
   AssignMissions = 'AssignMissions',
   MissionManager = 'MissionManager'
 }
-interface StaffMember {
+export interface StaffMember {
   id: number;
   name: string;
   pic: string;

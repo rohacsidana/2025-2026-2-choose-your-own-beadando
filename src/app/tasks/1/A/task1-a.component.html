@@ -20,17 +20,11 @@
       <div class="content-area">
         @switch (func) {
           @case (Functions.StaffManager) {
-            <h2>Személyzetkezelő</h2>
+            <app-staff-manager></app-staff-manager>
           }
-          @case (Functions.CreateMission) {
-            <h2>Új küldetés</h2>
-          }
-          @case (Functions.AssignMissions) {
-            <h2>Küldetések kiosztása</h2>
-          }
-          @case (Functions.MissionManager) {
-            <h2>Küldetésvezérlő</h2>
-          }
+          @case (Functions.CreateMission) {}
+          @case (Functions.AssignMissions) {}
+          @case (Functions.MissionManager) {}
           @default {
             <p>Kérjük, válasszon a bal oldali menüből a kezdéshez!</p>
           }

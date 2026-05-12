@@ -1,1 +1,45 @@
-<p>staff-manager works!</p>
+<div class="form-container">
+  <h2>Új személyzet hozzáadása</h2>
+
+  <form nz-form [formGroup]="staffForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label nzRequired>Név</nz-form-label>
+      <nz-form-control
+        [nzSpan]="14"
+        nzErrorTip="Kérlek, add meg a nevet (min. 3 karakter)!"
+      >
+        <input nz-input formControlName="name" placeholder="Gipsz Jakab" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Fénykép</nz-form-label>
+      <input type="file" (change)="fileChangeEvent($event)" />
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="4 / 3"
+        [output]="'base64'"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        (imageLoaded)="imageLoaded($event)"
+        (cropperReady)="cropperReady()"
+        (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+      @if (croppedImage) {
+        <div style="margin-top: 10px; text-align: center">
+          <p>Vágott kép előnézete:</p>
+          <img [src]="croppedImage" />
+        </div>
+      }
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzOffset]="6" [nzSpan]="14">
+        <button nz-button nzType="primary" [disabled]="!staffForm.valid">
+          Hozzáadás
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>
