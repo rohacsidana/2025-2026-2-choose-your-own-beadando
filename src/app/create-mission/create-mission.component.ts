@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Difficulty, Mission, Status } from '../tasks/1/A/task1-a.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { CookieService } from 'ngx-cookie-service';
+import { DataService } from '../_services/data.service';
 
 @Component({
   selector: 'app-create-mission',
@@ -14,7 +14,7 @@ export class CreateMissionComponent implements OnInit {
   missionForm: FormGroup;
   difficulties = Object.values(Difficulty);
   Difficulty = Difficulty;
-  private cookieService = inject(CookieService);
+  private dataService = inject(DataService);
   private fb = inject(FormBuilder);
   private msg = inject(NzMessageService);
 
@@ -69,8 +69,7 @@ export class CreateMissionComponent implements OnInit {
 
   submitForm(): void {
     if (this.missionForm.valid) {
-      const missionsSaved = this.cookieService.get('missions');
-      const missions = missionsSaved ? JSON.parse(missionsSaved) : [];
+      const missions = this.dataService.getMissions();
 
       const newMission: Mission = {
         id: Date.now(),
@@ -80,7 +79,7 @@ export class CreateMissionComponent implements OnInit {
       };
 
       missions.push(newMission);
-      this.cookieService.set('missions', JSON.stringify(missions), 7);
+      this.dataService.setMissions(missions);
 
       this.msg.success('Küldetés sikeresen létrehozva!');
       this.createForm();

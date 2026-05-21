@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { Mission, StaffMember, Status } from '../tasks/1/A/task1-a.component';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { StatusFilterPipe } from '../_pipes/status-filter.pipe';
+import { DataService } from '../_services/data.service';
 
 @Component({
   selector: 'app-assign-missions',
@@ -11,7 +11,7 @@ import { StatusFilterPipe } from '../_pipes/status-filter.pipe';
   standalone: false,
 })
 export class AssignMissionsComponent implements OnInit {
-  private cookieService = inject(CookieService);
+  private dataService = inject(DataService);
   private statusFilter = inject(StatusFilterPipe);
 
   missions: Mission[] = [];
@@ -24,11 +24,8 @@ export class AssignMissionsComponent implements OnInit {
   isModalVisible = false;
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('staff');
-    this.staff = stored ? JSON.parse(stored) : [];
-
-    const missionSaved = this.cookieService.get('missions');
-    this.missions = missionSaved ? JSON.parse(missionSaved) : [];
+    this.staff = this.dataService.getStaff();
+    this.missions = this.dataService.getMissions();
 
     this.createTree();
   }
@@ -84,7 +81,7 @@ export class AssignMissionsComponent implements OnInit {
       return;
 
     this.selectedMission.staff = this.selectedStaffIds;
-    this.cookieService.set('missions', JSON.stringify(this.missions), 7);
+    this.dataService.setMissions(this.missions);
 
     this.closeModal();
     this.createTree();

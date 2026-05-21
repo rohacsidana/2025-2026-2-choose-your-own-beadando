@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { StaffMember } from '../tasks/1/A/task1-a.component';
+import { DataService } from '../_services/data.service';
 
 @Component({
   selector: 'app-staff-manager',
@@ -22,11 +23,12 @@ export class StaffManagerComponent implements OnInit {
   editingMemberId: number;
   private fb = inject(FormBuilder);
   private msg = inject(NzMessageService);
+  private dataService = inject(DataService);
 
   constructor() {}
 
   ngOnInit(): void {
-    this.loadStaff();
+    this.staff = this.dataService.getStaff();
 
     this.staffForm = this.fb.group({
       name: [
@@ -40,11 +42,6 @@ export class StaffManagerComponent implements OnInit {
       ],
       pic: [null],
     });
-  }
-
-  loadStaff() {
-    const stored = localStorage.getItem('staff');
-    this.staff = stored ? JSON.parse(stored) : [];
   }
 
   fileChangeEvent(event: Event): void {
@@ -96,7 +93,7 @@ export class StaffManagerComponent implements OnInit {
         this.staff.push(newMember);
       }
 
-      localStorage.setItem('staff', JSON.stringify(this.staff));
+      this.dataService.setStaff(this.staff);
       this.msg.success(
         this.isEditing ? 'Sikeres módosítás!' : 'Sikeres hozzáadás!'
       );
@@ -118,8 +115,8 @@ export class StaffManagerComponent implements OnInit {
 
   deleteMember(id: number) {
     this.staff = this.staff.filter((mem) => mem.id !== id);
-    localStorage.setItem('staff', JSON.stringify(this.staff));
-    this.loadStaff();
+    this.dataService.setStaff(this.staff);
+    this.staff = this.dataService.getStaff();
     this.msg.success('Személyzet tagja törölve.');
   }
 
