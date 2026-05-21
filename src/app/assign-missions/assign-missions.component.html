@@ -1,1 +1,11 @@
-<p>assign-missions works!</p>
+<div class="tree-container" style="padding: 20px">
+  <h2>Küldetések</h2>
+  <nz-tree
+    [nzData]="nodes"
+    nzBlockNode
+    [nzExpandedIcon]="nodeIconTpl"
+  ></nz-tree>
+  <ng-template #nodeIconTpl let-node>
+    <nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'" />
+  </ng-template>
+</div>

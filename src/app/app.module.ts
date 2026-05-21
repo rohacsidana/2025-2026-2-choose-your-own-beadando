@@ -39,6 +39,10 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { CreateMissionComponent } from './create-mission/create-mission.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { AssignMissionsComponent } from './assign-missions/assign-missions.component';
+import { MissionManagerComponent } from './mission-manager/mission-manager.component';
+import { StatusFilterPipe } from './_pipes/status-filter.pipe';
+import { NzTreeComponent } from 'ng-zorro-antd/tree';
 
 const zorroModules = [
   NzButtonModule,
@@ -61,6 +65,7 @@ const zorroModules = [
   NzPopconfirmModule,
   NzSelectModule,
   NzInputNumberModule,
+  NzTreeComponent,
 ];
 
 @NgModule({
@@ -77,6 +82,8 @@ const zorroModules = [
     PreviewComponent,
     StaffManagerComponent,
     CreateMissionComponent,
+    AssignMissionsComponent,
+    MissionManagerComponent,
   ],
   imports: [
     ...zorroModules,
@@ -88,7 +95,7 @@ const zorroModules = [
     ReactiveFormsModule,
     ImageCropperComponent,
   ],
-  providers: [],
+  providers: [StatusFilterPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
