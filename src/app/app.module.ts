@@ -43,6 +43,7 @@ import { AssignMissionsComponent } from './assign-missions/assign-missions.compo
 import { MissionManagerComponent } from './mission-manager/mission-manager.component';
 import { StatusFilterPipe } from './_pipes/status-filter.pipe';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
+import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 
 const zorroModules = [
   NzButtonModule,
@@ -95,7 +96,10 @@ const zorroModules = [
     ReactiveFormsModule,
     ImageCropperComponent,
     FormsModule,
-  ],
+    CdkDrag,
+    DragDropModule,
+    StatusFilterPipe
+],
   providers: [StatusFilterPipe],
   bootstrap: [AppComponent],
 })

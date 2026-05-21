@@ -1,1 +1,36 @@
-<p>mission-manager works!</p>
+<div class="kanban-board-container" style="padding: 20px">
+  <h2>Küldetésvezérlő</h2>
+
+  <div cdkDropListGroup>
+    @for (status of statuses; track status) {
+      <div class="status-column">
+        <h3>{{ status }}</h3>
+
+        @let filteredMissions = missions | statusFilter: status;
+
+        <div
+          cdkDropList
+          [cdkDropListData]="filteredMissions"
+          cdkDropListOrientation="horizontal"
+          (cdkDropListDropped)="drop($event, status)"
+          class="card-container"
+        >
+          @for (mission of filteredMissions; track mission.id) {
+            <div cdkDrag [cdkDragData]="mission.id" class="mission-card">
+              <div>
+                <strong>{{ mission.name }}</strong>
+              </div>
+              <div>
+                <p>Nehézség: {{ mission.difficulty }}</p>
+                <p>Létszám: {{ mission.requiredStaff }} fő</p>
+              </div>
+              <div *cdkDragPlaceholder></div>
+            </div>
+          } @empty {
+            <div class="empty-status">Nincs küldetés ebben a státuszban</div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
