@@ -4,8 +4,27 @@
     [nzData]="nodes"
     nzBlockNode
     [nzExpandedIcon]="nodeIconTpl"
+    (nzClick)="onNodeClick($event)"
   ></nz-tree>
   <ng-template #nodeIconTpl let-node>
     <nz-icon [nzType]="node.isExpanded ? 'folder-open' : 'folder'" />
   </ng-template>
 </div>
+
+<ng-template #missionDetailsTpl>
+  @if (selectedMission) {
+    <div class="mission-details">
+      <p><strong>Név:</strong> {{ selectedMission.name }}</p>
+      <p><strong>Státusz:</strong> {{ selectedMission.status }}</p>
+      <p><strong>Nehézség:</strong> {{ selectedMission.difficulty }}</p>
+      <p>
+        <strong>Szükséges létszám:</strong>
+        {{ selectedMission.requiredStaff }} fő
+      </p>
+      <p><strong>Leírás:</strong></p>
+      <div class='mission-desc'>
+        {{ selectedMission.desc || 'Nincs leírás megadva.' }}
+      </div>
+    </div>
+  }
+</ng-template>
