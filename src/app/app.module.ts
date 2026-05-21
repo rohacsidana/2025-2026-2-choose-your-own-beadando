@@ -36,6 +36,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { CreateMissionComponent } from './create-mission/create-mission.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 const zorroModules = [
   NzButtonModule,
@@ -56,6 +59,8 @@ const zorroModules = [
   NzUploadModule,
   NzAvatarModule,
   NzPopconfirmModule,
+  NzSelectModule,
+  NzInputNumberModule,
 ];
 
 @NgModule({
@@ -71,6 +76,7 @@ const zorroModules = [
     SummaryComponent,
     PreviewComponent,
     StaffManagerComponent,
+    CreateMissionComponent,
   ],
   imports: [
     ...zorroModules,

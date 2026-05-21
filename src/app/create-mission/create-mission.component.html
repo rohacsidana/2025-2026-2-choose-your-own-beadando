@@ -1,1 +1,89 @@
-<p>create-mission works!</p>
+<div class="form-container">
+  <h2>Küldetés létrehozása</h2>
+
+  <form nz-form [formGroup]="missionForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label
+        [nzSpan]="24"
+        nzRequired
+        style="padding-bottom: 0 !important"
+        >Küldetés neve</nz-form-label
+      >
+      <nz-form-control [nzSpan]="24" nzErrorTip="A név megadása kötelező!">
+        <input
+          nz-input
+          formControlName="name"
+          placeholder="Pl.: Hail-Mary projekt"
+        />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" style="padding-bottom: 0 !important"
+        >Leírás</nz-form-label
+      >
+      <nz-form-control [nzSpan]="24">
+        <textarea
+          nz-input
+          formControlName="desc"
+          placeholder="A küldetés leírása..."
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label
+        [nzSpan]="24"
+        nzRequired
+        style="padding-bottom: 0 !important"
+        >Nehézség</nz-form-label
+      >
+      <nz-form-control [nzSpan]="24">
+        <nz-select formControlName="difficulty">
+          @for (diff of difficulties; track diff) {
+            <nz-option [nzValue]="diff" [nzLabel]="diff"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label
+        [nzSpan]="24"
+        nzRequired
+        style="padding-bottom: 0 !important"
+        >Szükséges létszám</nz-form-label
+      >
+      <nz-form-control [nzSpan]="24" [nzErrorTip]="staffErrorTpl">
+        <nz-input-number
+          formControlName="requiredStaff"
+          [nzMin]="1"
+          [nzMax]="3"
+          [nzStep]="1"
+          
+        >
+        </nz-input-number>
+
+        <ng-template #staffErrorTpl let-control>
+          @if (control.hasError('min')) {
+            @if (missionForm.get('difficulty')?.value === 'nehéz') {
+              Nehéz küldetéshez legalább 2 fő kell!
+            } @else {
+              Legalább 1 fő szükséges!
+            }
+          }
+          @if (control.hasError('max')) {
+            Maximum 3 fő lehet!
+          }
+          @if (control.hasError('required')) {
+            Kötelező megadni!
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzOffset]="6" [nzSpan]="14">
+        <button nz-button nzType="primary" [disabled]="!missionForm.valid">
+          Küldetés mentése
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

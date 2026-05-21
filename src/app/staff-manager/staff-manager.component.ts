@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
@@ -20,11 +20,10 @@ export class StaffManagerComponent implements OnInit {
     'https://avatars.akamai.steamstatic.com/6a991cedbf9caf7e0dfd32c5f17f13820c818bf8_full.jpg';
   isEditing = false;
   editingMemberId: number;
+  private fb = inject(FormBuilder);
+  private msg = inject(NzMessageService);
 
-  constructor(
-    private fb: FormBuilder,
-    private msg: NzMessageService
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.loadStaff();

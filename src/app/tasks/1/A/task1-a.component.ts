@@ -4,7 +4,7 @@ enum Functions {
   StaffManager = 'StaffManager',
   CreateMission = 'CreateMission',
   AssignMissions = 'AssignMissions',
-  MissionManager = 'MissionManager'
+  MissionManager = 'MissionManager',
 }
 export interface StaffMember {
   id: number;
@@ -12,19 +12,19 @@ export interface StaffMember {
   pic: string;
 }
 
-enum Difficulty {
-  Easy = 'Easy',
-  Medium = 'Medium',
-  Hard = 'Hard',
+export enum Difficulty {
+  Easy = 'Könnyű',
+  Medium = 'Közepes',
+  Hard = 'Nehéz',
 }
 
-enum Status {
-  Open = 'Open',
-  InProgress = 'In Progress',
-  Closed = 'Closed',
-  Failed = 'Failed',
+export enum Status {
+  Open = 'Nyitott',
+  InProgress = 'Folyamatban',
+  Closed = 'Lezárt',
+  Failed = 'Sikertelen',
 }
-interface Mission {
+export interface Mission {
   id: number;
   name: string;
   desc: string;
@@ -44,6 +44,5 @@ export class Task1AComponent {
   func: Functions | null = null;
   Functions = Functions;
 
-  constructor() { }
-  
+  constructor() {}
 }
