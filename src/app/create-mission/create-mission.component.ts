@@ -13,6 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class CreateMissionComponent implements OnInit {
   missionForm: FormGroup;
   difficulties = Object.values(Difficulty);
+  Difficulty = Difficulty;
   private cookieService = inject(CookieService);
   private fb = inject(FormBuilder);
   private msg = inject(NzMessageService);
@@ -22,7 +23,7 @@ export class CreateMissionComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    this.missionForm.get('difficulty')?.valueChanges.subscribe(() => {
+    this.missionForm.get('difficulty').valueChanges.subscribe(() => {
       this.updateStaffValidation();
     });
   }
@@ -41,26 +42,28 @@ export class CreateMissionComponent implements OnInit {
 
   updateStaffValidation(): void {
     const difficulty = this.missionForm.get('difficulty').value;
+    console.log('Difficulty is:', difficulty);
     const staffControl = this.missionForm.get('requiredStaff');
     if (difficulty === Difficulty.Hard) {
-      staffControl?.setValidators([
+      staffControl.setValidators([
         Validators.required,
         Validators.min(2),
         Validators.max(3),
       ]);
-      
     } else {
-      staffControl?.setValidators([
+      staffControl.setValidators([
         Validators.required,
         Validators.min(1),
         Validators.max(3),
       ]);
     }
 
-    staffControl?.updateValueAndValidity();
-    if (staffControl?.invalid) {
+    staffControl.updateValueAndValidity();
+    if (staffControl.invalid) {
+      console.log('staff input is INVALID');
       staffControl.markAsDirty();
       staffControl.markAsTouched();
+      staffControl.updateValueAndValidity();
     }
   }
 
@@ -82,12 +85,8 @@ export class CreateMissionComponent implements OnInit {
       this.msg.success('Küldetés sikeresen létrehozva!');
       this.createForm();
     } else {
-      Object.values(this.missionForm.controls).forEach((control) => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity();
-        }
-      });
+      this.missionForm.markAllAsDirty();
+      this.missionForm.updateValueAndValidity();
     }
   }
 }

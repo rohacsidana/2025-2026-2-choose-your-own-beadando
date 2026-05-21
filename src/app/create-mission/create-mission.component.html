@@ -3,12 +3,7 @@
 
   <form nz-form [formGroup]="missionForm" (ngSubmit)="submitForm()">
     <nz-form-item>
-      <nz-form-label
-        [nzSpan]="24"
-        nzRequired
-        style="padding-bottom: 0 !important"
-        >Küldetés neve</nz-form-label
-      >
+      <nz-form-label [nzSpan]="24" nzRequired>Küldetés neve</nz-form-label>
       <nz-form-control [nzSpan]="24" nzErrorTip="A név megadása kötelező!">
         <input
           nz-input
@@ -18,9 +13,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="24" style="padding-bottom: 0 !important"
-        >Leírás</nz-form-label
-      >
+      <nz-form-label [nzSpan]="24">Leírás</nz-form-label>
       <nz-form-control [nzSpan]="24">
         <textarea
           nz-input
@@ -30,12 +23,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label
-        [nzSpan]="24"
-        nzRequired
-        style="padding-bottom: 0 !important"
-        >Nehézség</nz-form-label
-      >
+      <nz-form-label [nzSpan]="24" nzRequired>Nehézség</nz-form-label>
       <nz-form-control [nzSpan]="24">
         <nz-select formControlName="difficulty">
           @for (diff of difficulties; track diff) {
@@ -44,26 +32,20 @@
         </nz-select>
       </nz-form-control>
     </nz-form-item>
-    <nz-form-item>
-      <nz-form-label
-        [nzSpan]="24"
-        nzRequired
-        style="padding-bottom: 0 !important"
-        >Szükséges létszám</nz-form-label
-      >
+    <nz-form-item style="margin-bottom: 15px">
+      <nz-form-label [nzSpan]="24" nzRequired>Szükséges létszám</nz-form-label>
       <nz-form-control [nzSpan]="24" [nzErrorTip]="staffErrorTpl">
         <nz-input-number
           formControlName="requiredStaff"
           [nzMin]="1"
           [nzMax]="3"
           [nzStep]="1"
-          
         >
         </nz-input-number>
 
         <ng-template #staffErrorTpl let-control>
           @if (control.hasError('min')) {
-            @if (missionForm.get('difficulty')?.value === 'nehéz') {
+            @if (missionForm.get('difficulty').value === Difficulty.Hard) {
               Nehéz küldetéshez legalább 2 fő kell!
             } @else {
               Legalább 1 fő szükséges!
