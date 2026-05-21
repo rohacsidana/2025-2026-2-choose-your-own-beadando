@@ -1,15 +1,8 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Mission, Status } from '../tasks/1/A/task1-a.component';
+import { Mission, StaffMember, Status } from '../tasks/1/A/task1-a.component';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { StatusFilterPipe } from '../_pipes/status-filter.pipe';
-import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-assign-missions',
@@ -20,15 +13,20 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 export class AssignMissionsComponent implements OnInit {
   private cookieService = inject(CookieService);
   private statusFilter = inject(StatusFilterPipe);
-  private modalService = inject(NzModalService);
+
   missions: Mission[] = [];
   nodes: NzTreeNodeOptions[] = [];
   Status = Status;
-  @ViewChild('missionDetailsTpl', { static: true })
-  missionDetailsTpl: TemplateRef<any>;
+
   selectedMission: Mission;
+  staff: StaffMember[] = [];
+  selectedStaffIds: number[] = [];
+  isModalVisible = false;
 
   ngOnInit(): void {
+    const stored = localStorage.getItem('staff');
+    this.staff = stored ? JSON.parse(stored) : [];
+
     const missionSaved = this.cookieService.get('missions');
     this.missions = missionSaved ? JSON.parse(missionSaved) : [];
 
@@ -61,25 +59,40 @@ export class AssignMissionsComponent implements OnInit {
 
     if (node.isLeaf) {
       const missionId = +node.key;
-
       const selectedMission = this.missions.find((m) => m.id === missionId);
 
       if (selectedMission) {
         this.selectedMission = selectedMission;
-        this.openDetailsModal();
+        this.selectedStaffIds = this.selectedMission.staff
+          ? [...this.selectedMission.staff]
+          : [];
+
+        this.isModalVisible = true;
       }
     }
   }
 
-  openDetailsModal(): void {
-    this.modalService.create({
-      nzTitle: 'Küldetés részletei',
-      nzContent: this.missionDetailsTpl,
-      nzFooter: null,
-      nzCentered: true,
-      nzOnCancel: () => {
-        this.selectedMission = null;
-      },
-    });
+  onStaffChange(currentSelection: number[]): void {
+    const maxAllowed = this.selectedMission.requiredStaff || 0;
+    if (currentSelection.length > maxAllowed) {
+      this.selectedStaffIds = currentSelection.slice(0, maxAllowed);
+    }
+  }
+
+  saveStaffAssignment(): void {
+    if (this.selectedStaffIds.length !== this.selectedMission.requiredStaff)
+      return;
+
+    this.selectedMission.staff = this.selectedStaffIds;
+    this.cookieService.set('missions', JSON.stringify(this.missions), 7);
+
+    this.closeModal();
+    this.createTree();
+  }
+
+  closeModal(): void {
+    this.isModalVisible = false;
+    this.selectedMission = null;
+    this.selectedStaffIds = [];
   }
 }

@@ -32,7 +32,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSplitterModule } from 'ng-zorro-antd/splitter';
 import { StaffManagerComponent } from './staff-manager/staff-manager.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
@@ -94,6 +94,7 @@ const zorroModules = [
     RouterModule,
     ReactiveFormsModule,
     ImageCropperComponent,
+    FormsModule,
   ],
   providers: [StatusFilterPipe],
   bootstrap: [AppComponent],

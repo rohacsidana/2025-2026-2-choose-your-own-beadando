@@ -11,20 +11,72 @@
   </ng-template>
 </div>
 
-<ng-template #missionDetailsTpl>
-  @if (selectedMission) {
-    <div class="mission-details">
-      <p><strong>Név:</strong> {{ selectedMission.name }}</p>
-      <p><strong>Státusz:</strong> {{ selectedMission.status }}</p>
-      <p><strong>Nehézség:</strong> {{ selectedMission.difficulty }}</p>
-      <p>
-        <strong>Szükséges létszám:</strong>
-        {{ selectedMission.requiredStaff }} fő
-      </p>
-      <p><strong>Leírás:</strong></p>
-      <div class='mission-desc'>
-        {{ selectedMission.desc || 'Nincs leírás megadva.' }}
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  nzTitle="Küldetés részletei és személyzet kiosztása"
+  [nzFooter]="modalFooterTpl"
+  nzCentered
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    @if (selectedMission) {
+      <div class="mission-details">
+        <p><strong>Név:</strong> {{ selectedMission.name }}</p>
+        <p><strong>Státusz:</strong> {{ selectedMission.status }}</p>
+        <p><strong>Nehézség:</strong> {{ selectedMission.difficulty }}</p>
+        <p>
+          <strong>Elvárt létszám:</strong>
+          {{ selectedMission.requiredStaff }} fő
+        </p>
+        <p>
+          <strong>Leírás:</strong> {{ selectedMission.desc || 'Nincs leírás.' }}
+        </p>
+        <nz-divider></nz-divider>
+
+        <div>
+          <label style="font-weight: bold; display: block; margin-bottom: 8px">
+            Személyzet hozzárendelése (Kiválasztva:
+            {{ selectedStaffIds.length }} /
+            {{ selectedMission.requiredStaff }} fő):
+          </label>
+          <nz-select
+            style="width: 100%"
+            nzMode="multiple"
+            nzPlaceHolder="Válassz személyzetet..."
+            [(ngModel)]="selectedStaffIds"
+            (ngModelChange)="onStaffChange($event)"
+          >
+            @for (member of staff; track member.id) {
+              <nz-option
+                [nzValue]="member.id"
+                [nzLabel]="member.name"
+              ></nz-option>
+            }
+          </nz-select>
+
+          @if (selectedStaffIds.length < selectedMission.requiredStaff) {
+            <p style="color: #d36667; margin-top: 5px; font-size: 12px">
+              Még legalább
+              {{ selectedMission.requiredStaff - selectedStaffIds.length }} főt
+              ki kell választanod!
+            </p>
+          }
+        </div>
       </div>
-    </div>
-  }
-</ng-template>
+    }
+  </ng-container>
+
+  <ng-template #modalFooterTpl>
+    @if (selectedMission) {
+      <button nz-button nzType="default" (click)="closeModal()">Mégsem</button>
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="selectedStaffIds.length !== selectedMission.requiredStaff"
+        (click)="saveStaffAssignment()"
+      >
+        Mentés
+      </button>
+    }
+  </ng-template>
+</nz-modal>
