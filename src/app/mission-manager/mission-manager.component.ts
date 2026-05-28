@@ -22,6 +22,10 @@ export class MissionManagerComponent implements OnInit {
     this.missions = this.dataService.getMissions();
   }
 
+  isStaff(): boolean {
+    return this.dataService.currentRole() === 'Staff';
+  }
+
   drop(event: CdkDragDrop<Mission[]>, targetStatus: Status): void {
     const movedMissionId = event.item.data;
     const mission = this.missions.find((m) => m.id === movedMissionId);
@@ -54,9 +58,7 @@ export class MissionManagerComponent implements OnInit {
   canMoveTo(currentStatus: Status, targetStatus: Status): boolean {
     if (currentStatus === Status.Open) {
       if (targetStatus !== Status.InProgress) {
-        this.message.error(
-          'Nyitott küldetést először el kell kezdeni...'
-        );
+        this.message.error('Nyitott küldetést először el kell kezdeni...');
         return false;
       }
     } else if (currentStatus === Status.InProgress) {

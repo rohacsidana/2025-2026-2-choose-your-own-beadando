@@ -42,6 +42,7 @@
             <nz-select
               style="width: 100%"
               [(ngModel)]="selectedStaffId"
+              (ngModelChange)="selectStaff()"
               nzPlaceHolder="Válasszon valakit..."
             >
               @for (member of staffList; track member.id) {
@@ -60,7 +61,6 @@
         <button
           [appHasRole]="Role.Admin"
           nz-button
-          nzBlock
           (click)="func = Functions.StaffManager"
         >
           Személyzetkezelő
@@ -68,7 +68,6 @@
         <button
           [appHasRole]="Role.Admin"
           nz-button
-          nzBlock
           (click)="func = Functions.CreateMission"
         >
           Új küldetés
@@ -76,12 +75,11 @@
         <button
           [appHasRole]="Role.Admin"
           nz-button
-          nzBlock
           (click)="func = Functions.AssignMissions"
         >
           Küldetések kiosztása
         </button>
-        <button nz-button nzBlock (click)="func = Functions.MissionManager">
+        <button nz-button (click)="func = Functions.MissionManager">
           Küldetésvezérlő
         </button>
       </div>

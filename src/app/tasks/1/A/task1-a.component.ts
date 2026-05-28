@@ -74,9 +74,14 @@ export class Task1AComponent implements OnInit {
     this.dataService.setRole(role);
     if (role === Role.Admin) {
       this.selectedStaffId = null;
+      this.dataService.setStaffID(null);
     } else {
       this.func = null;
       this.loadStaffList();
     }
+  }
+
+  selectStaff(): void {
+    this.dataService.setStaffID(this.selectedStaffId);
   }
 }

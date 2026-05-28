@@ -16,7 +16,13 @@
           class="card-container"
         >
           @for (mission of filteredMissions; track mission.id) {
-            <div cdkDrag [cdkDragData]="mission.id" class="mission-card">
+            <div
+              cdkDrag
+              [cdkDragData]="mission.id"
+              class="mission-card"
+              [cdkDragDisabled]="isStaff()"
+              [class.disabled]="isStaff()"
+            >
               <div>
                 <p class="card-header">
                   <strong>{{ mission.name }}</strong>

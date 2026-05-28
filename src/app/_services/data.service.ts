@@ -8,6 +8,11 @@ import { Mission, Role, StaffMember } from '../tasks/1/A/task1-a.component';
 export class DataService {
   private cookieService = inject(CookieService);
   currentRole = signal<Role>(Role.Admin);
+  selectedStaffID = signal<number | null>(null);
+
+  setStaffID(id: number | null): void {
+    this.selectedStaffID.set(id);
+  }
 
   setRole(role: Role): void {
     this.currentRole.set(role);

@@ -15,7 +15,7 @@ export const configuration = [
         10: true,
         11: true,
         12: true,
-        13: false,
+        13: true,
         14: false,
       },
     },
