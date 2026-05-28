@@ -1,6 +1,13 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
+import Mark from 'mark.js';
 
 @Component({
   selector: 'app-task2-b',
@@ -13,6 +20,11 @@ export class Task2BComponent implements AfterViewInit {
   fileName: string;
   fileContent: string;
   fileSize: string;
+
+  searchTerm: string = '';
+
+  @ViewChild('pre') preElement: ElementRef<HTMLPreElement>;
+  private mark: Mark | null = null;
 
   constructor() {}
 
@@ -47,5 +59,24 @@ export class Task2BComponent implements AfterViewInit {
     };
 
     reader.readAsText(file);
+  }
+
+  highlight(): void {
+    if (!this.mark) {
+      this.mark = new Mark(this.preElement.nativeElement);
+    }
+
+    this.mark.unmark({
+      done: () => {
+        if (!this.searchTerm) {
+          return;
+        }
+
+        this.mark.mark(this.searchTerm, {
+          caseSensitive: false,
+          separateWordSearch: false,
+        });
+      },
+    });
   }
 }

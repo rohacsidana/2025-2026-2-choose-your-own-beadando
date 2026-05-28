@@ -10,10 +10,24 @@
     Kattints a feltöltéshez vagy húzd ide a fájlt
   </button>
 </nz-upload>
+
+@if (fileContent) {
+  <nz-divider></nz-divider>
+  <div style="margin-top: 16px; margin-bottom: 16px">
+    <input
+      type="text"
+      nz-input
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="highlight()"
+      placeholder="Keresés a fájl tartalmában..."
+    />
+  </div>
+}
+
 @if (fileContent) {
   <div class="file-content">
     <h3>{{ fileName }} tartalma:</h3>
     <h4>Méret: {{ fileSize }}</h4>
-    <pre>{{ fileContent }}</pre>
+    <pre #pre>{{ fileContent }}</pre>
   </div>
 }
