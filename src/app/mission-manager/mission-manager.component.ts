@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Mission, Status } from '../tasks/1/A/task1-a.component';
+import { Mission, Role, Status } from '../tasks/1/A/task1-a.component';
 import { DataService } from '../_services/data.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -15,11 +15,19 @@ export class MissionManagerComponent implements OnInit {
   private message = inject(NzMessageService);
 
   missions: Mission[] = [];
+  displayedMissions: Mission[] = [];
   statuses = Object.values(Status);
   Status = Status;
 
   ngOnInit(): void {
     this.missions = this.dataService.getMissions();
+    if (this.dataService.currentRole() === Role.Admin) {
+      this.displayedMissions = this.missions;
+    } else if (this.dataService.selectedStaffID()) {
+      this.displayedMissions = this.missions.filter((m) =>
+        m.staff.includes(this.dataService.selectedStaffID())
+      );
+    }
   }
 
   isStaff(): boolean {

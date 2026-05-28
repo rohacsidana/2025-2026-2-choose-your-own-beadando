@@ -79,7 +79,11 @@
         >
           Küldetések kiosztása
         </button>
-        <button nz-button (click)="func = Functions.MissionManager">
+        <button
+          nz-button
+          (click)="func = Functions.MissionManager"
+          [disabled]="currentRole === Role.Staff && !selectedStaffId"
+        >
           Küldetésvezérlő
         </button>
       </div>

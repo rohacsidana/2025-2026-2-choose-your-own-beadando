@@ -6,7 +6,7 @@
       <div class="status-column">
         <h3>{{ status }}</h3>
 
-        @let filteredMissions = missions | statusFilter: status;
+        @let filteredMissions = displayedMissions | statusFilter: status;
 
         <div
           cdkDropList
