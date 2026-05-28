@@ -45,6 +45,7 @@ import { StatusFilterPipe } from './_pipes/status-filter.pipe';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { HasRoleDirective } from './_directives/has-role.directive';
+import { ClipboardModule } from 'ngx-clipboard';
 
 const zorroModules = [
   NzButtonModule,
@@ -90,6 +91,7 @@ const zorroModules = [
   ],
   imports: [
     ...zorroModules,
+    ClipboardModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

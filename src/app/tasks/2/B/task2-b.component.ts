@@ -8,6 +8,7 @@ import {
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import Mark from 'mark.js';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-task2-b',
@@ -16,6 +17,7 @@ import Mark from 'mark.js';
   standalone: false,
 })
 export class Task2BComponent implements AfterViewInit {
+  @ViewChild('pre') preElement: ElementRef<HTMLPreElement>;
   private messageService = inject(NzMessageService);
   fileName: string;
   fileContent: string;
@@ -23,9 +25,10 @@ export class Task2BComponent implements AfterViewInit {
 
   searchTerm: string = '';
 
-  @ViewChild('pre') preElement: ElementRef<HTMLPreElement>;
   private mark: Mark | null = null;
+  private clipboard = inject(ClipboardService);
   wordOccurances: Map<string, number> = new Map();
+  top10Words: string = '';
 
   constructor() {}
 
@@ -91,9 +94,15 @@ export class Task2BComponent implements AfterViewInit {
 
     console.log('--- TOP 10 LEGGYAKORIBB SZÓ ---');
     sortedWords.forEach(([word, count], index) => {
+      this.top10Words += `${index + 1}. ${word}: ${count} alkalom\n`;
       console.log(`${index + 1}. ${word}: ${count} alkalom`);
     });
     console.log('-------------------------------');
+  }
+
+  copyToClipboard() {
+    this.clipboard.copy(this.top10Words);
+    this.messageService.success('A TOP 10 szó sikeresen a vágólapra másolva!');
   }
 
   highlight(): void {

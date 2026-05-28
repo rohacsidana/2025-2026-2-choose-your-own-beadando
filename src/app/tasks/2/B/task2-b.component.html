@@ -29,5 +29,9 @@
     <h3>{{ fileName }} tartalma:</h3>
     <h4>Méret: {{ fileSize }}</h4>
     <pre #pre>{{ fileContent }}</pre>
+    <button nz-button (click)="copyToClipboard()">
+      <nz-icon nzType="copy"></nz-icon>
+      Top 10 leggyakoribb szó vágolapra másolása
+    </button>
   </div>
 }

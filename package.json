@@ -24,6 +24,7 @@
     "mark.js": "^8.11.1",
     "marked": "^17.0.0",
     "ng-zorro-antd": "^21.2.2",
+    "ngx-clipboard": "^16.0.0",
     "ngx-cookie-service": "^21.3.1",
     "ngx-image-cropper": "^9.1.6",
     "ngx-markdown": "^21.2.0",
