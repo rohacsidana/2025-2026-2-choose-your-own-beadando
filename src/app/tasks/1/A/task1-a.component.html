@@ -55,15 +55,30 @@
         }
       </div>
 
-      <nz-divider></nz-divider>
+      <nz-divider style="margin: 0"></nz-divider>
       <div class="button-group">
-        <button nz-button nzBlock (click)="func = Functions.StaffManager">
+        <button
+          [appHasRole]="Role.Admin"
+          nz-button
+          nzBlock
+          (click)="func = Functions.StaffManager"
+        >
           Személyzetkezelő
         </button>
-        <button nz-button nzBlock (click)="func = Functions.CreateMission">
+        <button
+          [appHasRole]="Role.Admin"
+          nz-button
+          nzBlock
+          (click)="func = Functions.CreateMission"
+        >
           Új küldetés
         </button>
-        <button nz-button nzBlock (click)="func = Functions.AssignMissions">
+        <button
+          [appHasRole]="Role.Admin"
+          nz-button
+          nzBlock
+          (click)="func = Functions.AssignMissions"
+        >
           Küldetések kiosztása
         </button>
         <button nz-button nzBlock (click)="func = Functions.MissionManager">

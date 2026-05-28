@@ -62,6 +62,7 @@ export class Task1AComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStaffList();
+    this.dataService.setRole(this.currentRole);
   }
 
   loadStaffList(): void {
@@ -70,9 +71,11 @@ export class Task1AComponent implements OnInit {
 
   selectRole(role: Role): void {
     this.currentRole = role;
+    this.dataService.setRole(role);
     if (role === Role.Admin) {
       this.selectedStaffId = null;
     } else {
+      this.func = null;
       this.loadStaffList();
     }
   }

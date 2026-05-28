@@ -1,12 +1,17 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Mission, StaffMember } from '../tasks/1/A/task1-a.component';
+import { Mission, Role, StaffMember } from '../tasks/1/A/task1-a.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
   private cookieService = inject(CookieService);
+  currentRole = signal<Role>(Role.Admin);
+
+  setRole(role: Role): void {
+    this.currentRole.set(role);
+  }
 
   getStaff(): StaffMember[] {
     const stored = localStorage.getItem('staff');

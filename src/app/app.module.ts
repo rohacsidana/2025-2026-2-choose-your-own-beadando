@@ -44,6 +44,7 @@ import { MissionManagerComponent } from './mission-manager/mission-manager.compo
 import { StatusFilterPipe } from './_pipes/status-filter.pipe';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
+import { HasRoleDirective } from './_directives/has-role.directive';
 
 const zorroModules = [
   NzButtonModule,
@@ -85,6 +86,7 @@ const zorroModules = [
     CreateMissionComponent,
     AssignMissionsComponent,
     MissionManagerComponent,
+    HasRoleDirective,
   ],
   imports: [
     ...zorroModules,
@@ -98,8 +100,8 @@ const zorroModules = [
     FormsModule,
     CdkDrag,
     DragDropModule,
-    StatusFilterPipe
-],
+    StatusFilterPipe,
+  ],
   providers: [StatusFilterPipe],
   bootstrap: [AppComponent],
 })
