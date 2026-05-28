@@ -25,6 +25,7 @@ export class Task2BComponent implements AfterViewInit {
 
   @ViewChild('pre') preElement: ElementRef<HTMLPreElement>;
   private mark: Mark | null = null;
+  wordOccurances: Map<string, number> = new Map();
 
   constructor() {}
 
@@ -52,6 +53,7 @@ export class Task2BComponent implements AfterViewInit {
       this.messageService.success(
         `A(z) "${this.fileName}" sikeresen beolvasva!`
       );
+      this.countWordOccurrences();
     };
 
     reader.onerror = () => {
@@ -59,6 +61,39 @@ export class Task2BComponent implements AfterViewInit {
     };
 
     reader.readAsText(file);
+  }
+
+  countWordOccurrences(): void {
+    this.wordOccurances.clear();
+
+    if (!this.fileContent) {
+      return;
+    }
+
+    const words = this.fileContent.trim().split(/\s+/);
+
+    for (const word of words) {
+      const cleanWord = word.toLowerCase().replace(/[?;,!.]+$/g, '');
+
+      if (cleanWord.length > 0) {
+        const currentCount = this.wordOccurances.get(cleanWord) || 0;
+        this.wordOccurances.set(cleanWord, currentCount + 1);
+      }
+    }
+
+    this.logTopTenWords();
+  }
+
+  logTopTenWords(): void {
+    const sortedWords = [...this.wordOccurances.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10);
+
+    console.log('--- TOP 10 LEGGYAKORIBB SZÓ ---');
+    sortedWords.forEach(([word, count], index) => {
+      console.log(`${index + 1}. ${word}: ${count} alkalom`);
+    });
+    console.log('-------------------------------');
   }
 
   highlight(): void {
