@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { DataService } from 'src/app/_services/data.service';
 
 enum Functions {
   StaffManager = 'StaffManager',
@@ -6,6 +7,12 @@ enum Functions {
   AssignMissions = 'AssignMissions',
   MissionManager = 'MissionManager',
 }
+
+export enum Role {
+  Admin = 'Admin',
+  Staff = 'Staff',
+}
+
 export interface StaffMember {
   id: number;
   name: string;
@@ -24,6 +31,7 @@ export enum Status {
   Closed = 'Lezárt',
   Failed = 'Sikertelen',
 }
+
 export interface Mission {
   id: number;
   name: string;
@@ -40,9 +48,32 @@ export interface Mission {
   styleUrls: ['./task1-a.component.less'],
   standalone: false,
 })
-export class Task1AComponent {
+export class Task1AComponent implements OnInit {
   func: Functions | null = null;
   Functions = Functions;
+  Role = Role;
+  private dataService = inject(DataService);
+
+  currentRole: Role = Role.Admin;
+  staffList: StaffMember[] = [];
+  selectedStaffId;
 
   constructor() {}
+
+  ngOnInit(): void {
+    this.loadStaffList();
+  }
+
+  loadStaffList(): void {
+    this.staffList = this.dataService.getStaff();
+  }
+
+  selectRole(role: Role): void {
+    this.currentRole = role;
+    if (role === Role.Admin) {
+      this.selectedStaffId = null;
+    } else {
+      this.loadStaffList();
+    }
+  }
 }

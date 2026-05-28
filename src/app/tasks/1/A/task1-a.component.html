@@ -1,6 +1,61 @@
 <div class="main-container">
   <nz-splitter>
     <nz-splitter-panel>
+      <div class="role-area">
+        <p>Válassza ki, milyen szerepkörben szeretné használni a rendszert!</p>
+
+        <div class="avatar-group">
+          <div
+            class="avatar-wrapper"
+            [class.active-avatar-wrapper]="currentRole === Role.Admin"
+            (click)="selectRole(Role.Admin)"
+            nz-tooltip
+            nzTooltipTitle="Admin"
+          >
+            <nz-avatar
+              [nzSize]="45"
+              nzIcon="user"
+              style="background-color: #aede99"
+            ></nz-avatar>
+            <span>Admin</span>
+          </div>
+
+          <div
+            class="avatar-wrapper"
+            [class.active-avatar-wrapper]="currentRole === Role.Staff"
+            (click)="selectRole(Role.Staff)"
+            nz-tooltip
+            nzTooltipTitle="Személyzet"
+          >
+            <nz-avatar
+              [nzSize]="45"
+              nzIcon="team"
+              style="background-color: #1890ff"
+            ></nz-avatar>
+            <span>Személyzet</span>
+          </div>
+        </div>
+
+        @if (currentRole === Role.Staff) {
+          <div class="user-selector-area">
+            <label class="choose-label"> Személyzeti tag kiválasztása: </label>
+            <nz-select
+              style="width: 100%"
+              [(ngModel)]="selectedStaffId"
+              nzPlaceHolder="Válasszon valakit..."
+            >
+              @for (member of staffList; track member.id) {
+                <nz-option
+                  [nzValue]="member.id"
+                  [nzLabel]="member.name"
+                ></nz-option>
+              }
+            </nz-select>
+          </div>
+        }
+      </div>
+
+      <nz-divider></nz-divider>
       <div class="button-group">
         <button nz-button nzBlock (click)="func = Functions.StaffManager">
           Személyzetkezelő
