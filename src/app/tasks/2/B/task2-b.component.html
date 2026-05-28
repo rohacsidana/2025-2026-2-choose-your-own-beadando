@@ -1,1 +1,19 @@
-<p>task2-b works!</p>
+<nz-upload
+  nzType="drag"
+  [nzMultiple]="false"
+  nzAccept=".txt"
+  [nzBeforeUpload]="beforeUpload"
+  [nzShowUploadList]="false"
+>
+  <button nz-button>
+    <nz-icon nzType="upload" />
+    Kattints a feltöltéshez vagy húzd ide a fájlt
+  </button>
+</nz-upload>
+@if (fileContent) {
+  <div class="file-content">
+    <h3>{{ fileName }} tartalma:</h3>
+    <h4>Méret: {{ fileSize }}</h4>
+    <pre>{{ fileContent }}</pre>
+  </div>
+}
