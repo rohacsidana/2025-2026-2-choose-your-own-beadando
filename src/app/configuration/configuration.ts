@@ -12,7 +12,7 @@ export const configuration = [
         7: true,
         8: true,
         9: true,
-        10: false,
+        10: true,
         11: false,
         12: false,
         13: false,

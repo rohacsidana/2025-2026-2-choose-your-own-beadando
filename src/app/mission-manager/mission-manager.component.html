@@ -18,7 +18,9 @@
           @for (mission of filteredMissions; track mission.id) {
             <div cdkDrag [cdkDragData]="mission.id" class="mission-card">
               <div>
-                <strong>{{ mission.name }}</strong>
+                <p class="card-header">
+                  <strong>{{ mission.name }}</strong>
+                </p>
               </div>
               <div>
                 <p>Nehézség: {{ mission.difficulty }}</p>
